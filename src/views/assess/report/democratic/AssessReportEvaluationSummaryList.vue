@@ -1,0 +1,520 @@
+<template>
+  <a-card :bordered="false">
+    <!-- 查询区域 -->
+    <div class="table-page-search-wrapper">
+      <a-form layout="inline" @keyup.enter.native="searchQuery">
+        <a-row :gutter="24">
+          <a-col :xl="6" :lg="7" :md="8" :sm="24">
+            <a-form-item label="年度">
+              <t-dict-select-tag @change='searchQuery' placeholder="请选择年度" v-model="queryParam.currentYear" dictCode="assess_year" />
+            </a-form-item>
+          </a-col>
+          <a-col :xl="6" :lg="7" :md="8" :sm="24">
+            <span style="float: left;overflow: hidden;" class="table-page-search-submitButtons">
+              <a-button type="primary" @click="searchQuery" icon="search">查询</a-button>
+              <a-button type="primary" @click="searchReset" icon="reload" style="margin-left: 8px">重置</a-button>
+<!--              <a @click="handleToggleSearch" style="margin-left: 8px">-->
+<!--                {{ toggleSearchStatus ? '收起' : '展开' }}-->
+<!--                <a-icon :type="toggleSearchStatus ? 'up' : 'down'" />-->
+<!--              </a>-->
+            </span>
+          </a-col>
+        </a-row>
+      </a-form>
+    </div>
+    <!-- 查询区域-END -->
+
+    <!-- 操作按钮区域 -->
+    <div class='table-operator'>
+      <a-button @click='initDemocratic' v-has="'gbc:admin'" type='primary' icon='plus'>发起一报告两评议民主测评</a-button>
+      <a-button @click="exportEnterpriseAgreeRank"  v-has="'gbc:admin'" type="primary" icon="download">导出本年度新提拔干部民主评议排名</a-button>
+      <a-button @click="exportLeaderWorkRank" v-has="'gbc:admin'"  type="primary" icon="download">导出本年度干部选拔任用工作民主评议排名</a-button>
+      <a-button @click="exportLeaderWorkDetails" v-has="'gbc:admin'"  type="primary" icon="download">导出年度干部选拔任用工作民主评议结果汇总明细表</a-button>
+      <a-button @click="exportLeaderEvaluationByDepart" v-has="'gbc:admin'"  type="primary" icon="download">导出各单位新提拔干部民主评议结果</a-button>
+    </div>
+    <!-- table区域-begin -->
+    <div>
+      <div class="ant-alert ant-alert-info" style="margin-bottom: 16px;">
+        <i class="anticon anticon-info-circle ant-alert-icon"></i> 已选择 <a
+        style="font-weight: 600">{{ selectedRowKeys.length }}</a>项
+        <a style="margin-left: 24px" @click="onClearSelected">清空</a>
+      </div>
+
+      <a-table
+        ref="table"
+        size="middle"
+        bordered
+        rowKey="id"
+        class="j-table-force-nowrap"
+        :scroll="{x:true}"
+        :columns="columns"
+        :dataSource="dataSource"
+        :pagination="ipagination"
+        :loading="loading"
+        :rowSelection="{selectedRowKeys: selectedRowKeys, onChange: onSelectChange}"
+        @change="handleTableChange">
+
+        <template slot='status' slot-scope='text, record'>
+          <div style='width: 96%; margin: auto'>
+<!--            <a-progress :percent="toFixedO(record.filledNum / record.num * 100)" size="small" status="active" />-->
+            <a-tag style='width: 66px' :color='record.filledNum/record.num === 1 ? "#87d068" : "#f81d22"'>{{ record.filledNum }} /
+              {{ record.num }}
+            </a-tag>
+          </div>
+        </template>
+
+        <template slot="htmlSlot" slot-scope="text">
+          <div v-html="text"></div>
+        </template>
+        <template slot="imgSlot" slot-scope="text,record">
+          <span v-if="!text" style="font-size: 16px;font-style: italic;">无图片</span>
+          <img v-else :src="getImgView(text)" :preview="record.id" height="25px" alt=""
+               style="max-width:80px;font-size: 16px;font-style: italic;" />
+        </template>
+        <template slot="fileSlot" slot-scope="text">
+          <span v-if="!text" style="font-size: 16px;font-style: italic;">无文件</span>
+          <a-button
+            v-else
+            :ghost="true"
+            type="primary"
+            icon="download"
+            size="small"
+            @click="downloadFile(text)">
+            下载
+          </a-button>
+        </template>
+
+        <span slot="action" slot-scope="text, record">
+          <a v-has="'gbc:admin'" @click="handleEdit(record)">详情</a>
+        </span>
+
+      </a-table>
+    </div>
+
+    <a-modal v-model='initModalVisible' ok-text='发起' cancel-text='取消' @ok='onSubmit' @cancel='handleClose'>
+      <template slot='title'>
+        <tj-title :value="'发起一报告两评议民主测评'"></tj-title>
+      </template>
+
+      <template slot='footer'>
+        <a-button
+          key='back'
+          @click="
+            initModalVisible = false
+            form.deadline = ''
+          "
+        >
+          取消
+        </a-button>
+        <a-button key='submit' type='primary' :loading='btnLoading' @click='onSubmit'> 发起</a-button>
+      </template>
+
+      <a-form-model ref='ruleForm' :model='form' :label-col='labelCol' :wrapper-col='wrapperCol' :rules='rules'>
+        <a-form-model-item label='年度' prop='currentYear'>
+          <a-input v-model='form.currentYear' @change='yearChange' />
+        </a-form-model-item>
+
+        <a-form-model-item label='考核名称' prop='assessName'>
+          <a-input v-model='form.assessName' />
+        </a-form-model-item>
+
+        <a-form-model-item label='截止日期' prop='deadline'>
+          <a-date-picker
+            v-model='form.deadline'
+            :disabled-date='disabledDate'
+            type='date'
+            placeholder='请选择截至日期'
+            style='width: 100%'
+          />
+        </a-form-model-item>
+      </a-form-model>
+    </a-modal>
+
+    <assess-report-evaluation-summary-modal ref="modalForm" @ok="modalFormOk" />
+  </a-card>
+</template>
+
+<script>
+
+import { JeecgListMixin } from '@/mixins/JeecgListMixin'
+import AssessReportEvaluationSummaryModal from './modules/AssessReportEvaluationSummaryModal.vue'
+import '@/assets/less/TableExpand.less'
+import { getAssessingInfo, submitInitReportDemocratic } from '@/api/assessApis'
+import moment from 'moment'
+import TModal from '@/component/TModal.vue'
+import  tjTitle from '@/component/TjTitle'
+import TDictSelectTag from '@/component/TDictSelectTag.vue'
+import { axios } from '@/utils/assessReq'
+export default {
+  name: 'AssessReportEvaluationSummaryList',
+  mixins: [JeecgListMixin],
+  components: {
+    TDictSelectTag,
+    TModal,
+    AssessReportEvaluationSummaryModal,
+    tjTitle
+  },
+  data() {
+    return {
+      description: '一报告两评议民主测评汇总管理页面',
+      // 表头
+      columns: [
+        {
+          title: '#',
+          dataIndex: '',
+          key: 'rowIndex',
+          width: 60,
+          align: 'center',
+          customRender: function(t, r, index) {
+            return parseInt(index) + 1
+          }
+        },
+        {
+          title: '年度',
+          align: 'center',
+          dataIndex: 'currentYear_dictText'
+        },
+        {
+          title: '测评名称',
+          align: 'center',
+          dataIndex: 'assessName'
+        },
+        {
+          title: '单位',
+          align: 'center',
+          dataIndex: 'depart_dictText'
+        },
+        {
+          title: '开始时间',
+          align: 'center',
+          dataIndex: 'startDate',
+          customRender: function(text) {
+            return !text ? '' : (text.length > 10 ? text.substr(0, 10) : text)
+          }
+        },
+        {
+          title: '结束时间',
+          align: 'center',
+          dataIndex: 'endDate',
+          customRender: function(text) {
+            return !text ? '' : (text.length > 10 ? text.substr(0, 10) : text)
+          }
+        },
+        {
+          title: '填报状态',
+          align: 'center',
+          scopedSlots: { customRender: 'status' }
+        },
+        {
+          title: '排名',
+          align: 'center',
+          dataIndex: 'ranking',
+          scopedSlots: { customRender: 'ranking' }
+        },
+        {
+          title: '排名变化',
+          align: 'center',
+          dataIndex: 'rankingChange',
+          scopedSlots: { customRender: 'rankingChange' }
+        },
+        {
+          title: '操作',
+          dataIndex: 'action',
+          align: 'center',
+          fixed: 'right',
+          width: 147,
+          scopedSlots: { customRender: 'action' }
+        }
+      ],
+      url: {
+        list: '/modules/report/reportDemocratic/list',
+        delete: '/modules/report/reportDemocratic/delete',
+        deleteBatch: '/modules/report/reportDemocratic/deleteBatch',
+        exportXlsUrl: '/modules/report/reportDemocratic/exportXls',
+        importExcelUrl: 'modules/report/reportDemocratic/importExcel'
+
+      },
+      dictOptions: {},
+      superFieldList: [],
+      form: {
+        assessName: '',
+        currentYear: '',
+        deadline: undefined
+      },
+      initModalVisible: false,
+      btnLoading: false,
+      rules: {
+        assessName: [
+          { required: true, message: '请输入考核名称', trigger: 'blur' }
+        ],
+        currentYear: [
+          { required: true, message: '请输入年度', trigger: 'change' }
+        ],
+        deadline: [{ required: true, message: '请选择截止日期', trigger: 'change' }]
+      },
+      labelCol: { span: 6 },
+      wrapperCol: { span: 14 },
+    }
+  },
+  created() {
+    this.getSuperFieldList()
+  },
+  computed: {
+    importExcelUrl: function() {
+      return `${window._CONFIG['domianURL']}/${this.url.importExcelUrl}`
+    }
+  },
+  methods: {
+    initDictConfig() {
+    },
+    handleEdit: function(record) {
+      this.$refs.modalForm.edit(record)
+      this.$refs.modalForm.title = '编辑'
+      this.$refs.modalForm.disableSubmit = false
+    },
+    getSuperFieldList() {
+      let fieldList = []
+      fieldList.push({ type: 'string', value: 'reportFillId', text: '填报id', dictCode: '' })
+      fieldList.push({ type: 'string', value: 'currentYear', text: '年度', dictCode: 'assess_year' })
+      fieldList.push({ type: 'string', value: 'assessName', text: '测评名称', dictCode: '' })
+      fieldList.push({ type: 'sel_depart', value: 'depart', text: '单位' })
+      fieldList.push({ type: 'date', value: 'startDate', text: '开始时间' })
+      fieldList.push({ type: 'date', value: 'endDate', text: '结束时间' })
+      fieldList.push({ type: 'int', value: 'num', text: '测评人数', dictCode: '' })
+      fieldList.push({ type: 'int', value: 'filledNum', text: '已完成数量', dictCode: '' })
+      this.superFieldList = fieldList
+    },
+    initDemocratic() {
+      // let date = new Date()
+      // let year = date.getFullYear()
+
+      getAssessingInfo("report").then((res) => {
+        if (res.success) {
+          this.form.assessName = res.result.currentYear + '一报告两评议民主测评'
+          this.form.currentYear = res.result.currentYear
+        } else {
+          let date = new Date()
+          let year = date.getFullYear()
+          this.form.assessName = year + '一报告两评议民主测评'
+          this.form.currentYear = year
+        }
+      })
+
+      this.initModalVisible = true
+    },
+    yearChange(val) {
+      let year = val.target.value
+      this.form.assessName = year + '一报告两评议民主测评'
+    },
+    onSubmit() {
+      this.btnLoading = true
+      this.$refs.ruleForm.validate((valid) => {
+        if (valid) {
+          submitInitReportDemocratic(this.form).then((res) => {
+            if (res.success) {
+              this.initModalVisible = false
+              this.anonymousUserList = res.result.records
+              this.loadData()
+            } else {
+              // this.$message.error(res.message)
+
+              // this.$confirm({
+              //   title: '消息提示',
+              //   content: (h) => <div style='color:red;'>{res.message}</div>,
+              //   onOk: () => {
+              //   },
+              //   onCancel: () => {
+              //   }
+              // })
+              this.$error({
+                title: '错误',
+                content: res.message
+              })
+            }
+            this.btnLoading = false
+          })
+        } else {
+          this.btnLoading = false
+          return false
+        }
+      })
+    },
+    handleClose() {
+      this.form.assessName = ''
+      this.form.currentYear = ''
+      this.form.deadline = ''
+      this.anonymousUserVisible = false
+    },
+    disabledDate(current) {
+      // Can not select days before today and today
+      return current && current < moment().endOf('day')
+    },
+    // 去掉小数
+    toFixedO(num) {
+      return Number(num.toFixed(0))
+    },
+    exportEnterpriseAgreeRank() {
+      let param={};
+      let year=this.queryParam.currentYear;
+      if (year){
+        param.currentYear=year;
+      }
+      axios.get("/modules/report/reportDemocratic/exportEnterpriseAgreeRank",{ params:param,responseType: 'blob',timeout: 60000})
+        .then((res) => {
+          if (res && res.headers) {
+            let contentDisposition = res.headers['content-disposition']
+            let fileName = contentDisposition ? contentDisposition.split('filename=')[1] : '本年度新提拔干部民主评议排名.xlsx'
+            let realname = decodeURIComponent(fileName)
+            let contentType = res.headers['content-type']
+            let url = window.URL.createObjectURL(new Blob([res.data], { type: contentType }))
+            let link = document.createElement('a')
+            link.href = url
+            link.setAttribute('download', realname) // 使用后端设置的文件名
+            document.body.appendChild(link)
+            link.click()
+            this.$emit('over')
+            document.body.removeChild(link)
+          } else {
+            console.error('Response headers are undefined')
+          }
+        })
+        .catch((error) => {
+          console.error('Error downloading file:', error)
+        })
+    },
+    exportLeaderWorkRank() {
+      let param={};
+      let year=this.queryParam.currentYear;
+      if (year){
+        param.currentYear=year;
+      }
+      axios.get("/modules/report/reportDemocratic/exportLeaderWorkRank",{ params:param,responseType: 'blob',timeout: 60000})
+        .then((res) => {
+          if (res && res.headers) {
+            let contentDisposition = res.headers['content-disposition']
+            let fileName = contentDisposition ? contentDisposition.split('filename=')[1] : '本年度干部选拔任用工作民主评议结果排名.xlsx'
+            let realname = decodeURIComponent(fileName)
+            let contentType = res.headers['content-type']
+            let url = window.URL.createObjectURL(new Blob([res.data], { type: contentType }))
+            let link = document.createElement('a')
+            link.href = url
+            link.setAttribute('download', realname) // 使用后端设置的文件名
+            document.body.appendChild(link)
+            link.click()
+            this.$emit('over')
+            document.body.removeChild(link)
+          } else {
+            console.error('Response headers are undefined')
+          }
+        })
+        .catch((error) => {
+          console.error('Error downloading file:', error)
+        })
+    },
+    exportLeaderWorkDetails() {
+      let param={};
+      let year=this.queryParam.currentYear;
+      if (year){
+        param.currentYear=year;
+      }
+      axios.get("/modules/report/reportDemocratic/exportLeaderWorkDetails",{ params:param,responseType: 'blob',timeout: 500000})
+        .then((res) => {
+          if (res && res.headers) {
+            let contentDisposition = res.headers['content-disposition']
+            let fileName = contentDisposition ? contentDisposition.split('filename=')[1] : '干部选拔任用工作民主评议结果汇总表.xlsx'
+            let realname = decodeURIComponent(fileName)
+            let contentType = res.headers['content-type']
+            let url = window.URL.createObjectURL(new Blob([res.data], { type: contentType }))
+            let link = document.createElement('a')
+            link.href = url
+            link.setAttribute('download', realname) // 使用后端设置的文件名
+            document.body.appendChild(link)
+            link.click()
+            this.$emit('over')
+            document.body.removeChild(link)
+          } else {
+            console.error('Response headers are undefined')
+          }
+        })
+        .catch((error) => {
+          console.error('Error downloading file:', error)
+        })
+    },
+
+    exportLeaderEvaluationByDepart() {
+      let param={};
+      let year=this.queryParam.currentYear;
+      if (year){
+        param.currentYear=year;
+      }
+      axios.get("/modules/report/reportDemocratic/exportLeaderDataByDepart",{ params:param,responseType: 'blob',timeout: 500000})
+        .then((res) => {
+          if (res && res.headers) {
+            let contentDisposition = res.headers['content-disposition']
+            let fileName = contentDisposition ? contentDisposition.split('filename=')[1] : '年度各单位新提拔干部民主测评明细.zip'
+            let realname = decodeURIComponent(fileName)
+            let contentType = res.headers['content-type']
+            let url = window.URL.createObjectURL(new Blob([res.data], { type: contentType }))
+            let link = document.createElement('a')
+            link.href = url
+            link.setAttribute('download', realname) // 使用后端设置的文件名
+            document.body.appendChild(link)
+            link.click()
+            this.$emit('over')
+            document.body.removeChild(link)
+          } else {
+            console.error('Response headers are undefined')
+          }
+        })
+        .catch((error) => {
+          console.error('Error downloading file:', error)
+        })
+    },
+  }
+}
+</script>
+<style scoped>
+   /deep/ .ant-modal-content {
+    position: relative;
+    background-color: rgb(246, 248, 248);
+    background-clip: padding-box;
+    border: 0;
+    border-radius: 4px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    pointer-events: auto;
+}
+ /deep/ .ant-modal-header {
+    padding: 16px 24px;
+    color: rgba(0, 0, 0, 0.65);
+    background: rgb(246, 248, 248);
+    border-bottom: 0px solid #e8e8e8;
+    border-radius: 4px 4px 0 0;
+}
+/deep/ .ant-form-horizontal  {
+    position: relative;
+    background-color: white;
+    border: 1px solid rgb(234, 235, 234);;
+    padding: 10px 0px;
+}
+/deep/ .ant-modal-footer {
+    padding: 10px 16px;
+    text-align: right;
+    background: transparent;
+    border-top: 0px solid #e8e8e8;
+    border-radius: 0 0 4px 4px;
+}
+/deep/ .ant-form-item label {
+    position: relative;
+    margin-right: 10px;
+    font-family: 思源黑体;
+font-size: 16px;
+font-weight: 500;
+color: rgb(9, 24, 52);
+text-align: right;
+margin-right: 10px;
+width:90px;
+min-width: 90px;
+
+}
+@import '~@assets/less/common.less';
+</style>
