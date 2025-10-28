@@ -4,7 +4,7 @@
       <a-form-model ref="form" :model="model" :rules="validatorRules" slot="detail">
         <a-row>
           <a-col :span="24">
-            <a-form-model-item label="辅助人员" :labelCol="labelCol" :wrapperCol="wrapperCol" prop="people">
+            <a-form-model-item label="试用期人员" :labelCol="labelCol" :wrapperCol="wrapperCol" prop="people">
               <a-select
                 show-search
                 :value="model.people"

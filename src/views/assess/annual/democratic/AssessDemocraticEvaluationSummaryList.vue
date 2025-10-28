@@ -914,6 +914,12 @@ export default {
       getAction('/modules/annual/democraticSummary/getDemocraticProgressByYear?year=' + this.queryParam.currentYear).then((res) => {
         if (res.success) {
           this.dataSource = res.result.records
+        } else {
+          this.$confirm({
+            title: '民主测评不存在',
+            content: res.message,
+            onOk: () => {}
+          })
         }
       })
 

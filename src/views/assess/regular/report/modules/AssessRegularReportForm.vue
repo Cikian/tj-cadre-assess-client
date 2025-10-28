@@ -307,7 +307,7 @@ export default {
       // 计算剩余座位数
       getAction(this.url.assessRegularReportItem.sublistRemainingSeats, params).then((res) => {
         this.totalQuota = res.totalQuota
-        this.remainingQuota = res.remainingQuota
+        this.remainingQuota = res.remainingQuota < 0 ? 0 : res.remainingQuota
       })
     },
     handleEditClosed(event) {

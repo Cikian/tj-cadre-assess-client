@@ -463,6 +463,13 @@ export default {
     handleAdd() {
       this.addModalVisible = true // 显示新增弹窗
     },
+
+    reloadData() {
+      this.dataSource = []
+      this.catchDataSources = []
+      this.loadData()
+    },
+
     handleSubmit() {
       // this.form.validateFields((valid) => {
       //   if (valid) {
@@ -472,7 +479,7 @@ export default {
         .then((response) => {
           if (response) {
             // 在这里可以更新数据源，添加新的记录
-            this.loadData()
+            this.reloadData()
             this.addModalVisible = false // 关闭弹窗
             // this.$message.success('新增成功！')
             this.$success({
@@ -527,7 +534,7 @@ export default {
       postAction('/modules/assessAnnualSummary/editDepart', form)
         .then((response) => {
           if (response) {
-            this.loadData()
+            this.reloadData()
             this.adjustDepartModalVisible = false
             this.resetAdjustDepartForm()
             // this.$message.success('调整成功！')

@@ -1,7 +1,7 @@
 <template>
   <a-card :bordered="false">
     <!-- 查询区域 -->
-    <div class="table-page-search-wrapper" v-has="'gbc:admin'">
+    <div class="table-page-search-wrapper">
       <a-form layout="inline" @keyup.enter.native="searchQuery">
         <a-row :gutter="24">
           <a-col :xl="5" :lg="7" :md="8" :sm="24">
@@ -9,7 +9,7 @@
               <t-dict-select-tag placeholder="请选择年度" v-model="queryParam.currentYear" dictCode="assess_year" />
             </a-form-item>
           </a-col>
-          <a-col  :xl="5" :lg="7" :md="8" :sm="24">
+          <a-col  :xl="5" :lg="7" :md="8" :sm="24" v-has="'gbc:admin'">
             <a-form-item label="处室">
               <j-select-depart placeholder="请选择处室" v-model="queryParam.departmentCode" />
             </a-form-item>
@@ -19,9 +19,9 @@
 <!--              <j-dict-select-tag placeholder="请选择预警状态" v-model="queryParam.warnStatus" dictCode="warn_status" />-->
 <!--            </a-form-item>-->
 <!--          </a-col>-->
-          <a-col :xl="5" :lg="7" :md="8" :sm="24">
+          <a-col :xl="5" :lg="7" :md="8" :sm="24" v-has="'gbc:admin'">
             <a-form-item label="填报状态">
-              <j-dict-select-tag placeholder="请选择填报状态" v-model="queryParam.status" dictCode="report_status" />
+              <j-dict-select-tag placeholder="请选择填报状态" v-model="queryParam.status" dictCode="report_status" @change="searchQuery" />
             </a-form-item>
           </a-col>
           <a-col :xl="4" :lg="7" :md="8" :sm="24">
@@ -95,18 +95,18 @@
         </template>
 
         <span slot="action" slot-scope="text, record">
-          <a v-show="record.status == '1' || record.status == '4'" v-has="'depart:report'"
+          <a v-show="(record.status == '1' || record.status == '4') && assessingInfo.assessing" v-has="'depart:report'"
              @click="handleEdit(record)">填报</a>
 <!--          <a @click="handleEdit(record)">填报</a>-->
-          <a v-show="record.status == '2' || record.status == '3'" v-has="'depart:report'" @click="handleDetail(record)">详情</a>
+          <a v-show="record.status == '2' || record.status == '3' || !assessingInfo.assessing" v-has="'depart:report'" @click="handleDetail(record)">详情</a>
 
           <a-divider v-show="record.status == '1' || record.status == '4'" type="vertical" v-has="'depart:leader'" />
           <a-divider v-show="record.status == '2' || record.status == '3'" type="vertical" v-has="'depart:leader'" />
 
-          <a v-show="record.status != '2'" @click="handleDetail(record)" v-has="'depart:leader'">详情</a>
+          <a v-show="record.status != '2' || !assessingInfo.assessing" @click="handleDetail(record)" v-has="'depart:leader'">详情</a>
           <a @click="handleDetail(record)" v-has="'gbc:admin'">详情</a>
           <a @click="handleDetail(record)" v-has="'rsc:admin'">详情</a>
-          <a v-show="record.status == '2'" @click="handleEdit(record)" v-has="'depart:leader'">查看/修改</a>
+          <a v-show="record.status == '2' && assessingInfo.assessing" @click="handleEdit(record)" v-has="'depart:leader'">查看/修改</a>
 
           <a-divider type="vertical" v-show="record.status == '2'" v-has="'depart:leader'" />
 
@@ -174,6 +174,7 @@ import AssessRegularProcessModal from './modules/AssessRegularProcessModal'
 import { getAction } from '@/api/manage'
 import '@/assets/less/TableExpand.less'
 import TDictSelectTag from '@/component/TDictSelectTag.vue'
+import { getAssessingInfo } from '@/api/assessApis'
 
 export default {
   name: 'AssessRegularReportList',
@@ -258,11 +259,17 @@ export default {
         importExcelUrl: '/regular/report/importExcel'
       },
       dictOptions: {},
-      superFieldList: []
+      superFieldList: [],
+      assessingInfo: {}
     }
   },
   created() {
     this.getSuperFieldList()
+    getAssessingInfo("regular").then(res => {
+      if (res.success) {
+        this.assessingInfo = res.result
+      }
+    })
   },
   computed: {
     importExcelUrl: function() {

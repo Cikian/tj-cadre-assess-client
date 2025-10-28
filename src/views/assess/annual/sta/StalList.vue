@@ -706,7 +706,7 @@ export default {
     },
     handleEdit: function(record) {
       this.$refs.modalForm.edit(record, this.queryParam)
-      this.$refs.modalForm.title = '编辑'
+      this.$refs.modalForm.title = '年度考核民主测评变化曲线'
       this.$refs.modalForm.disableSubmit = false
     },
     clickNumItem(num) {

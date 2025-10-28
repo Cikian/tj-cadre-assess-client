@@ -37,8 +37,8 @@
           </a-form-model-item>
         </template>
 
-        <a-form-model-item label='用户姓名' :labelCol='labelCol' :wrapperCol='wrapperCol' prop='realname'>
-          <a-input placeholder='请输入用户姓名' v-model='model.realname' />
+        <a-form-model-item label='用户名称' :labelCol='labelCol' :wrapperCol='wrapperCol' prop='realname'>
+          <a-input placeholder='请输入用户名称' v-model='model.realname' />
         </a-form-model-item>
 
 <!--        <a-form-model-item label='工号' :labelCol='labelCol' :wrapperCol='wrapperCol' prop='workNo'>-->

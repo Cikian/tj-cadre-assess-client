@@ -46,7 +46,7 @@
             width: 200
           },
           {
-            title: '用户姓名',
+            title: '用户名称',
             align: "center",
             dataIndex: 'realname',
           },

@@ -42,15 +42,21 @@ import { axios } from '@/utils/assessReq'
 export default {
   name: 'LeaderRecommendModal',
   components: {
-    TModal,
+    TModal
   },
   props: {
     formDisable: {
       required: false,
       type: Boolean,
-      default: false,
+      default: false
     },
-  },
+    year: {
+      required: false,
+      type: String,
+      default: "0"
+    }
+  }
+  ,
   data() {
     return {
       title: '',
@@ -68,16 +74,16 @@ export default {
           key: 'rowIndex',
           width: 60,
           align: 'center',
-          customRender: function (t, r, index) {
+          customRender: function(t, r, index) {
             return parseInt(index) + 1
-          },
+          }
         },
 
         {
           title: '局领导',
           align: 'center',
           width: 100,
-          dataIndex: 'leader_dictText',
+          dataIndex: 'leader_dictText'
         },
         {
           title: '推优详情',
@@ -87,41 +93,43 @@ export default {
               title: '局机关领导干部',
               align: 'center',
               width: 300,
-              dataIndex: 'bureau',
+              dataIndex: 'bureau'
             },
             {
               title: '基层单位领导班子',
               align: 'center',
               width: 300,
-              dataIndex: 'group_dictText',
+              dataIndex: 'group_dictText'
             },
             {
               title: '分局+参公领导干部',
               align: 'center',
               width: 300,
-              dataIndex: 'basic',
+              dataIndex: 'basic'
             },
             {
               title: '事业单位领导干部',
               align: 'center',
               width: 300,
-              dataIndex: 'institution',
-            },
-          ],
+              dataIndex: 'institution'
+            }
+          ]
         },
         {
           title: '操作',
           dataIndex: 'action',
           align: 'center',
-          scopedSlots: { customRender: 'action' },
-        },
-      ],
+          scopedSlots: { customRender: 'action' }
+        }
+      ]
     }
-  },
+  }
+  ,
   mounted() {
     // 获取当前考核信息
     this.loadData()
-  },
+  }
+  ,
   methods: {
     loadData() {
       getAssessingInfo('annual').then((res) => {
@@ -132,7 +140,7 @@ export default {
             this.showNoDataMask = true // 显示无数据遮罩
           } else {
             // 获取推优
-            getAction('/modules/assessAnnualSummary/getRecommendTemp').then((res) => {
+            getAction('/modules/assessAnnualSummary/getRecommendTemp?year=' + this.year).then((res) => {
               if (res.success) {
                 this.dataSource = res.result.records
               }
@@ -151,7 +159,8 @@ export default {
           this.showNoDataMask = true // 显示无数据遮罩
         }
       })
-    },
+    }
+    ,
     returned(record) {
       this.$confirm({
         title: '确认退回',
@@ -164,7 +173,7 @@ export default {
               // this.$message.success('退回成功！')
               this.$success({
                 title: '成功',
-                content: '退回成功！',
+                content: '退回成功！'
               })
               this.loadData()
               this.$emit('refresh')
@@ -172,18 +181,19 @@ export default {
               // this.$message.error(res.message)
               this.$error({
                 title: '错误',
-                content: res.message,
+                content: res.message
               })
             }
           })
         },
         onCancel: () => {
-        },
+        }
       })
-    },
+    }
+    ,
     openExport() {
       axios
-        .post('/modules/assessAnnualSummary/exportExl', {}, { responseType: 'blob' })
+        .post('/modules/assessAnnualSummary/exportExl?year=' + this.year, {}, { responseType: 'blob' })
         .then((res) => {
           if (res && res.headers) {
             let contentDisposition = res.headers['content-disposition']
@@ -205,19 +215,24 @@ export default {
         .catch((error) => {
           console.error('Error downloading file:', error)
         })
-    },
+    }
+    ,
     close() {
       this.$emit('close')
       this.visible = false
-    },
+    }
+    ,
     submitCallback() {
       this.$emit('ok')
       this.visible = false
-    },
+    }
+    ,
     handleCancel() {
       this.close()
-    },
-  },
+    }
+
+  }
+
 }
 </script>
 <style scoped>

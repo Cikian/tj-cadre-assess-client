@@ -220,7 +220,7 @@
                           :placeholder="replaceProps(col, col.placeholder)"
                           :filterOption="(i,o)=>handleSelectFilterOption(i,o,col)"
                           :maxTagCount="1"
-                          :display-render="({ labels }) => labels[labels.length - 1]"
+                          :display-render="displayRender"
                           @change="(v)=>handleChangeSelectCommon(v,id,row,col)"
                           @search="(v)=>handleSearchSelect(v,id,row,col)"
                           @blur="(v)=>handleBlurSearch(v,id,row,col)"
@@ -236,34 +236,35 @@
                     </template>
 
                     <!-- cascader -->
-                    <template v-else-if="col.type === formTypes.cascader">
+<!--                    <template v-else-if="col.type === formTypes.cascader">-->
 
-                      <a-tooltip v-bind="buildTooltipProps(row, col, id)">
-                        <a-cascader
-                          v-if="isEditRow(row, col)"
-                          :disabled="row.canEdit === false || col.disabled === true || disabled"
-                          :id="id"
-                          :key="i"
-                          v-bind="buildProps(row,col)"
-                          :style="{'width': '100%'}"
-                          :value="cascaderValues[id]"
-                          :options="cascaderOptions"
-                          :getPopupContainer="getParentContainer"
-                          :placeholder="replaceProps(col, col.placeholder)"
-                          :filterOption="(i,o)=>handleSelectFilterOption(i,o,col)"
-                          :maxTagCount="1"
-                          @change="(v)=>handleChangeSelectCommon(v,id,row,col)"
-                          @search="(v)=>handleSearchSelect(v,id,row,col)"
-                          @blur="(v)=>handleBlurSearch(v,id,row,col)"
-                        />
-                        <span
-                          v-else
-                          class="j-td-span no-edit"
-                          :class="{disabled: buildProps(row,col).disabled}"
-                          @click.stop="handleEditRow(row, col)"
-                        >{{ getSelectTranslateText(cascaderValues[id], row, col) }}</span>
-                      </a-tooltip>
-                    </template>
+<!--                      <a-tooltip v-bind="buildTooltipProps(row, col, id)">-->
+<!--                        <a-cascader-->
+<!--                          v-if="isEditRow(row, col)"-->
+<!--                          :disabled="row.canEdit === false || col.disabled === true || disabled"-->
+<!--                          :id="id"-->
+<!--                          :key="i"-->
+<!--                          v-bind="buildProps(row,col)"-->
+<!--                          :style="{'width': '100%'}"-->
+<!--                          :value="cascaderValues[id]"-->
+<!--                          :options="cascaderOptions"-->
+<!--                          :getPopupContainer="getParentContainer"-->
+<!--                          :placeholder="replaceProps(col, col.placeholder)"-->
+<!--                          :filterOption="(i,o)=>handleSelectFilterOption(i,o,col)"-->
+<!--                          :maxTagCount="1"-->
+<!--                          expandTrigger="hover"-->
+<!--                          @change="(v)=>handleChangeSelectCommon(v,id,row,col)"-->
+<!--                          @search="(v)=>handleSearchSelect(v,id,row,col)"-->
+<!--                          @blur="(v)=>handleBlurSearch(v,id,row,col)"-->
+<!--                        />-->
+<!--                        <span-->
+<!--                          v-else-->
+<!--                          class="j-td-span no-edit"-->
+<!--                          :class="{disabled: buildProps(row,col).disabled}"-->
+<!--                          @click.stop="handleEditRow(row, col)"-->
+<!--                        >{{ getSelectTranslateText(cascaderValues[id], row, col) }}</span>-->
+<!--                      </a-tooltip>-->
+<!--                    </template>-->
 
                     <!-- 部门选择 -->
                     <template v-else-if="col.type === formTypes.sel_depart">
@@ -943,7 +944,7 @@ export default {
           label: '100',
         },
         {
-          value: '95',
+          value: '95—99',
           label: '95—99',
           children: [
             {
@@ -969,7 +970,7 @@ export default {
           ],
         },
         {
-          value: '90',
+          value: '90—94',
           label: '90—94',
           children: [
             {
@@ -995,7 +996,7 @@ export default {
           ],
         },
         {
-          value: '85',
+          value: '85—89',
           label: '85—89',
           children: [
             {
@@ -1021,7 +1022,7 @@ export default {
           ],
         },
         {
-          value: '80',
+          value: '80—84',
           label: '80—84',
           children: [
             {
@@ -1047,7 +1048,7 @@ export default {
           ],
         },
         {
-          value: '75',
+          value: '75—79',
           label: '75—79',
           children: [
             {
@@ -1073,7 +1074,7 @@ export default {
           ],
         },
         {
-          value: '70',
+          value: '70—74',
           label: '70—74',
           children: [
             {
@@ -1099,7 +1100,7 @@ export default {
           ],
         },
         {
-          value: '65',
+          value: '65—69',
           label: '65—69',
           children: [
             {
@@ -1125,7 +1126,7 @@ export default {
           ],
         },
         {
-          value: '60',
+          value: '60—64',
           label: '60—64',
           children: [
             {
@@ -1151,7 +1152,7 @@ export default {
           ],
         },
         {
-          value: '50',
+          value: '50—59',
           label: '50—59',
           children: [
             {
@@ -1402,6 +1403,12 @@ export default {
 
   },
   methods: {
+    displayRender({ labels }) {
+      console.log("Fuck ant design");
+      console.log(labels)
+      console.log(labels[labels.length - 1])
+      return labels[labels.length - 1];
+    },
     // 判断文件/图片是否存在
     hasUploadValue(id){
       let flag = this.uploadValues[id] != null && this.uploadValues[id].toString().length>0

@@ -347,7 +347,10 @@ export default {
     this.getAssessing();
   },
   mounted(){
-
+    this.loadData()
+    this.getAssessing();
+    this.initDictConfig()
+    this.getSuperFieldList()
   },
   computed: {
     importExcelUrl: function () {
@@ -549,6 +552,7 @@ export default {
           that.queryParam.pageSize=100;
           that.activeKey = '1'
           that.loadData(1)
+          this.getStatisticsCounts()
           that.$message.success("计算成功！")
         }
       })

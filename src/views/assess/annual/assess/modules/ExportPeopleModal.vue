@@ -18,23 +18,7 @@
             </a-select-option>
           </a-select>
         </a-form-model-item>
-        <a-form-model-item label="季度">
-          <a-select v-model="form.quarter" placeholder="请选择季度">
-            <a-select-option key="1" value="1">
-              1
-            </a-select-option>
-            <a-select-option key="2" value="2">
-              2
-            </a-select-option>
-            <a-select-option key="3" value="3">
-              3
-            </a-select-option>
-            <a-select-option key="4" value="4">
-              4
-            </a-select-option>
-          </a-select>
-        </a-form-model-item>
-      </a-form-model>
+              </a-form-model>
     </a-spin>
   </t-modal>
 </template>
@@ -46,7 +30,7 @@ import { getDictItemByCode } from '@/utils/commonUtils'
 import { axios } from '@/utils/assessReq'
 
 export default {
-  name: 'ExportModal',
+  name: 'ExportPeopleModal',
   components: {
     TModal,
     GradeModel,
@@ -64,7 +48,6 @@ export default {
       wrapperCol: { span: 18 },
       form: {
         currentYear: '',
-        quarter: '',
       },
 
       yearDict: [],
@@ -78,6 +61,7 @@ export default {
       this.$nextTick(() => {})
     },
     async initData() {
+      console.log("点击后第二")
       this.visible = true
       this.$nextTick(async () => {
         try {
@@ -99,11 +83,11 @@ export default {
       this.visible = false
       this.$emit('ok')
       axios
-        .post(`/common/downloadReportFile?year=${this.form.currentYear}&quarter=${this.form.quarter}`, null, { responseType: 'blob' })
+        .post(`/common/downloadAnnualFile?year=${this.form.currentYear}`, null, { responseType: 'blob' })
         .then((res) => {
           if (res && res.headers) {
             let contentDisposition = res.headers['content-disposition']
-            let fileName = contentDisposition ? contentDisposition.split('filename=')[1] : this.form.currentYear + '年第' + this.form.quarter + '季度平时考核人员名单.zip'
+            let fileName = contentDisposition ? contentDisposition.split('filename=')[1] : this.form.currentYear + '年度考核人员名单.zip'
             let realname = decodeURIComponent(fileName)
             let contentType = res.headers['content-type']
             let url = window.URL.createObjectURL(new Blob([res.data], { type: contentType }))

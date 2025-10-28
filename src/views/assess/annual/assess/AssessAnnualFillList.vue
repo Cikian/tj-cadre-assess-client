@@ -1,22 +1,22 @@
 <template>
   <a-card :bordered='false'>
     <!-- 查询区域 -->
-    <div class='table-page-search-wrapper' v-has="'gbc:admin'">
+    <div class='table-page-search-wrapper'>
       <a-form layout='inline' @keyup.enter.native='searchQuery'>
         <a-row :gutter='24'>
           <a-col :xl='6' :lg='7' :md='8' :sm='24'>
             <a-form-item label='年度'>
-              <t-dict-select-tag placeholder='请选择年度' v-model='queryParam.currentYear' dictCode='assess_year' />
+              <t-dict-select-tag placeholder='请选择年度' v-model='queryParam.currentYear' dictCode='assess_year' @change="searchQuery" />
             </a-form-item>
           </a-col>
-          <a-col :xl='6' :lg='7' :md='8' :sm='24'>
+          <a-col :xl='6' :lg='7' :md='8' :sm='24' v-has="'gbc:admin'">
             <a-form-item label='处室'>
-              <j-select-depart placeholder='请选择处室' v-model='queryParam.depart' />
+              <j-select-depart placeholder='请选择处室' v-model='queryParam.depart' @change="searchQuery" />
             </a-form-item>
           </a-col>
-          <a-col :xl='6' :lg='7' :md='8' :sm='24'>
+          <a-col :xl='6' :lg='7' :md='8' :sm='24' v-has="'gbc:admin'">
             <a-form-item label='状态'>
-              <j-dict-select-tag placeholder='请选择状态' v-model='queryParam.status' dictCode='report_status' />
+              <j-dict-select-tag placeholder='请选择状态' v-model='queryParam.status' dictCode='report_status' @change="searchQuery" />
             </a-form-item>
           </a-col>
           <template v-if='toggleSearchStatus'>
@@ -48,7 +48,9 @@
       <a-button v-has="'gbc:admin'" @click='confirmVoteNum' type='primary' icon='ordered-list'>民主测评前匿名票核对</a-button>
 
       <a-button v-has="'gbc:admin'" @click='beforeInitDemocratic' type='primary' icon='plus'>发起年度民主测评</a-button>
-      <a-button @click='exportResVisible = true' type='primary' icon='download'>下载填报情况</a-button>
+      <a-button v-has="'gbc:admin'" @click='openExportPeople' type='primary' icon='download'>下载历史考核人员信息</a-button>
+      <a-button v-has="'depart:report'" @click='exportResVisible = true' type='primary' icon='download'>下载往年填报情况</a-button>
+      <a-button v-has="'depart:leader'" @click='exportResVisible = true' type='primary' icon='download'>下载往年填报情况</a-button>
 
       <!--      <a-button @click="openNegativeModal" type="primary" icon="plus" v-if="canFillNegative">负面清单录入</a-button>-->
       <!--      <a-button type="primary" icon="download" @click="openExport()">导出Excel</a-button>-->
@@ -259,6 +261,7 @@
 
     <assess-annual-fill-modal ref='modalForm' @ok='modalFormOk' />
     <assess-annual-negative-list-modal ref='negativeForm'></assess-annual-negative-list-modal>
+    <export-people-modal ref="exportModal"></export-people-modal>
 
     <a-modal
       v-model='rejectedVisible'
@@ -467,11 +470,13 @@ import TDictSelectTag from '@/component/TDictSelectTag.vue'
 import AssessAnnualFillForm from '@/views/assess/annual/assess/modules/AssessAnnualFillForm.vue'
 import TModal from '@/component/TModal.vue'
 import jeupload from '@/component/jeupload.vue'
+import ExportPeopleModal from '@/views/assess/annual/assess/modules/ExportPeopleModal.vue'
 
 export default {
   name: 'AssessAnnualFillList',
   mixins: [JeecgListMixin],
   components: {
+    ExportPeopleModal,
     jeupload,
     TModal, AssessAnnualFillForm,
     TDictSelectTag,
@@ -778,6 +783,12 @@ export default {
         .catch((error) => {
           console.error('Error downloading file:', error)
         })
+    },
+
+    openExportPeople() {
+      console.log("点击后第一")
+      this.$refs.exportModal.initData()
+      this.$refs.exportModal.visible = true
     },
 
     onSubmitRejected() {

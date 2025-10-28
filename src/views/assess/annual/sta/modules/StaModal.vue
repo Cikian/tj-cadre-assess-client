@@ -15,7 +15,7 @@
 
     <template slot="footer" ref="footer">
       <a-button type="primary" @click="downloadExcel" :loading="loading">下载Excel</a-button>
-      <a-button type="danger" v-on="$listeners" @click="$emit('cancel')">关闭</a-button>
+      <a-button type="danger" v-on="$listeners" @click="handleCancel">关闭</a-button>
     </template>
 
     <div>
@@ -576,6 +576,7 @@ export default {
     ,
 
     close() {
+      console.log("点击关闭")
       this.visible = false
     }
     ,
@@ -585,6 +586,7 @@ export default {
     }
     ,
     handleCancel() {
+      console.log("点击关闭")
       this.close()
     }
     ,

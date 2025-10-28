@@ -192,8 +192,8 @@
               <span v-if='record.editable'>
                 <a @click='() => save(record.id, "newLeaders")'><a-icon type='check' /></a>
 
-                <a-divider type='vertical' />
-                <a @click='() => cancel(record.id, "newLeaders")'><a-icon style='color: #fa3739' type='close' /></a>
+<!--                <a-divider type='vertical' />-->
+<!--                <a @click='() => cancel(record.id, "newLeaders")'><a-icon style='color: #fa3739' type='close' /></a>-->
               </span>
               <span v-else>
                 <a :disabled="formDisabled" @click='() => editRow(record.id, "newLeaders")'>
@@ -1168,6 +1168,9 @@ export default {
       })
       this.assessObjCacheData = this.assessObj.map(item => ({ ...item }))
       this.cancelAll('assessObj')
+
+      this.originalDateValue = []
+      this.currentDateValue = []
     },
     // 上传之前的回调
     beforeUpload(file){

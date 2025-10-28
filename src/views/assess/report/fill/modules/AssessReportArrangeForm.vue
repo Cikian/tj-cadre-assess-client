@@ -298,7 +298,7 @@ export default {
         this.model.voteB = 0
       }
 
-      if (this.model.voteA && this.model.voteB && this.model.voteA >= 0 && this.model.voteB >= 0) {
+      if (this.model.voteA >= 0 && this.model.voteB >= 0) {
         this.model.partinNum = this.model.voteA + this.model.voteB
       } else {
         this.model.partinNum = 0

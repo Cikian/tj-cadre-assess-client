@@ -1121,6 +1121,12 @@ export default {
           revocationAssess(type).then(res => {
             if (res.success) {
               this.loadData()
+            } else {
+              this.$error({
+                title: '无法撤销！',
+                content: res.message,
+                onOk: () => {}
+              })
             }
           })
         },

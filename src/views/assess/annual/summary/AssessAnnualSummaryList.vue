@@ -680,7 +680,7 @@
       ref='exportModal'
     ></assess-annual-summary-export-modal>
     <assess-annual-negative-list-modal ref='negativeForm'></assess-annual-negative-list-modal>
-    <leader-recommend-modal @refresh='loadData' ref='leaderRecommendModal'></leader-recommend-modal>
+    <leader-recommend-modal :year="queryParam.currentYear" ref='leaderRecommendModal'></leader-recommend-modal>
     <merit-modal @loadData='loadData' ref='meritModal'></merit-modal>
     <party-organization-modal @loadData='loadData' ref='organizationModal'></party-organization-modal>
     <adjustment ref='adjustment'></adjustment>
@@ -1271,6 +1271,11 @@ export default {
     },
     initDictConfig() {
     },
+    searchReset() {
+      this.queryParam = {}
+      this.loadData(1)
+      this.$refs.leaderRecommendModal.loadData()
+    },
     getSuperFieldList() {
       let fieldList = []
       fieldList.push({ type: 'string', value: 'currentYear', text: '年度', dictCode: 'assess_year' })
@@ -1326,6 +1331,16 @@ export default {
         this.ipagination.current = 1
       }
       this.loadData(1)
+    },
+
+    searchQuery() {
+      this.loadData(1)
+      this.$refs.leaderRecommendModal.year = this.queryParam.currentYear
+      this.$refs.leaderRecommendModal.loadData()
+      // 点击查询清空列表选中行
+      // https://gitee.com/jeecg/jeecg-boot/issues/I4KTU1
+      this.selectedRowKeys = []
+      this.selectionRows = []
     },
 
     loadData(arg) {

@@ -557,9 +557,13 @@ export default {
     getScoreArr(score){
       // 对5取余
       let arr = []
-      score % 5 === 0 ? arr = [score] : arr = [score - (score % 5), score]
-      console.log("处理分数")
-      console.log(arr)
+      if (score === 100) {
+        return ['100']
+      }
+      if (50 <= score && score < 60) {
+        return ['50—59', score.toString()]
+      }
+      arr = [(score - (score % 5)).toString() + "—" + (score - (score % 5) + 4).toString(), score.toString()]
       return arr
     },
 

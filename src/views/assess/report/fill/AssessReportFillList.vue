@@ -1,7 +1,7 @@
 <template>
   <a-card :bordered="false">
     <!-- 查询区域 -->
-    <div v-has="'gbc:admin'" class="table-page-search-wrapper">
+    <div class="table-page-search-wrapper">
       <a-form layout="inline" @keyup.enter.native="searchQuery">
         <a-row :gutter="24">
           <a-col :xl="5" :lg="7" :md="8" :sm="24">
@@ -9,12 +9,12 @@
               <t-dict-select-tag @change='searchQuery' placeholder="请选择年度" v-model="queryParam.currentYear" dictCode="assess_year" />
             </a-form-item>
           </a-col>
-          <a-col  :xl="5" :lg="7" :md="8" :sm="24">
+          <a-col  :xl="5" :lg="7" :md="8" :sm="24" v-has="'gbc:admin'">
             <a-form-item label="处室">
               <j-select-depart @change='searchQuery' placeholder="请选择处室" v-model="queryParam.depart" />
             </a-form-item>
           </a-col>
-          <a-col :xl="5" :lg="7" :md="8" :sm="24">
+          <a-col :xl="5" :lg="7" :md="8" :sm="24" v-has="'gbc:admin'">
             <a-form-item label="填报状态">
               <j-dict-select-tag @change='searchQuery' placeholder="请选择填报状态" v-model="queryParam.status" dictCode="report_status" />
             </a-form-item>
@@ -36,7 +36,7 @@
 
     <!-- 操作按钮区域 -->
     <div class="table-operator">
-      <a-button @click="initAssess" type="primary" v-has="'gbc:admin'" icon="plus">发起考核</a-button>
+<!--      <a-button @click="initAssess" type="primary" v-has="'gbc:admin'" icon="plus">发起考核</a-button>-->
 <!--      <a-button type="primary" icon="download" @click="openExport()">导出新提拔干部信息</a-button>-->
       <!--      <a-button type='primary' icon='download' @click="handleExportXls('一报告两评议填报')">导出</a-button>-->
       <!--      <a-upload name='file' :showUploadList='false' :multiple='false' :headers='tokenHeader' :action='importExcelUrl'-->

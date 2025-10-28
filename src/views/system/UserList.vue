@@ -6,28 +6,26 @@
       <a-form layout="inline" @keyup.enter.native="searchQuery">
         <a-row :gutter="24">
 
-          <a-col :md="6" :sm="12">
+
+          <a-col :md="6" :sm="8">
+            <a-form-item label="用户名称">
+              <j-input placeholder="请输入用户名称模糊查询" v-model="queryParam.realname"></j-input>
+            </a-form-item>
+          </a-col>
+          <a-col :md="6" :sm="8">
             <a-form-item label="账号">
               <!--<a-input placeholder="请输入账号查询" v-model="queryParam.username"></a-input>-->
               <j-input placeholder="输入账号模糊查询" v-model="queryParam.username"></j-input>
             </a-form-item>
           </a-col>
-
-          <a-col :md="6" :sm="8">
-            <a-form-item label="性别">
-              <a-select v-model="queryParam.sex" placeholder="请选择性别">
-                <a-select-option value="">请选择</a-select-option>
-                <a-select-option value="1">男</a-select-option>
-                <a-select-option value="2">女</a-select-option>
-              </a-select>
-            </a-form-item>
-          </a-col>
-
-
           <template v-if="toggleSearchStatus">
             <a-col :md="6" :sm="8">
-              <a-form-item label="真实名字">
-                <a-input placeholder="请输入真实名字" v-model="queryParam.realname"></a-input>
+              <a-form-item label="性别">
+                <a-select v-model="queryParam.sex" placeholder="请选择性别">
+                  <a-select-option value="">请选择</a-select-option>
+                  <a-select-option value="1">男</a-select-option>
+                  <a-select-option value="2">女</a-select-option>
+                </a-select>
               </a-form-item>
             </a-col>
 
@@ -288,7 +286,7 @@ export default {
           sorter: true
         },
         {
-          title: '用户姓名',
+          title: '用户名称',
           align: 'center',
           width: 100,
           dataIndex: 'realname'
@@ -349,7 +347,7 @@ export default {
       ],
       superQueryFieldList: [
         { type: 'input', value: 'username', text: '用户账号' },
-        { type: 'input', value: 'realname', text: '用户姓名' },
+        { type: 'input', value: 'realname', text: '用户名称' },
         { type: 'select', value: 'sex', dbType: 'int', text: '性别', dictCode: 'sex' }
       ],
       url: {

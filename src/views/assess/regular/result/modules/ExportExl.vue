@@ -16,7 +16,7 @@
           <t-dict-select-tag placeholder="请选择年度" v-model="form.currentYear" dictCode="assess_year" />
         </a-form-model-item>
         <a-form-model-item label="选择类型">
-          <a-select v-model="form.type" placeholder="请选择导出范围" style="width: 180px" @change="handleSelectChange">
+          <a-select v-model="form.type" placeholder="请选择导出范围" @change="handleSelectChange">
             <a-select-option value="全部">全部考核结果</a-select-option>
             <!-- 固定选项 -->
             <a-select-option v-if="personnelDepartment" :value="personnelDepartment">{{

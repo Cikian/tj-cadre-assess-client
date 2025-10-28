@@ -12,7 +12,7 @@
 
 
     <div style="overflow-y: scroll;height:570px">
-      <a-button type="primary" icon="download" @click="exportExl">导出Excel</a-button>
+<!--      <a-button type="primary" icon="download" @click="exportExl">导出Excel</a-button>-->
       <a-table
         ref="table"
         size="middle"
