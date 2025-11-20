@@ -65,12 +65,12 @@
     <div class="table-operator" style="border-top: 5px">
       <a-button @click="handleAdd" type="primary" icon="plus">添加用户</a-button>
       <a-button type="primary" icon="download" @click="handleExportXls('用户信息')">导出</a-button>
-      <a-upload name="file" :showUploadList="false" :multiple="false" :headers="tokenHeader" :action="importExcelUrl"
-                @change="handleImportExcel">
-        <a-button type="primary" icon="import">导入</a-button>
-      </a-upload>
-      <j-third-app-button biz-type="user" :selected-row-keys="selectedRowKeys" syncToApp syncToLocal
-                          @sync-finally="onSyncFinally" />
+<!--      <a-upload name="file" :showUploadList="false" :multiple="false" :headers="tokenHeader" :action="importExcelUrl"-->
+<!--                @change="handleImportExcel">-->
+<!--        <a-button type="primary" icon="import">导入</a-button>-->
+<!--      </a-upload>-->
+<!--      <j-third-app-button biz-type="user" :selected-row-keys="selectedRowKeys" syncToApp syncToLocal-->
+<!--                          @sync-finally="onSyncFinally" />-->
       <a-button type="primary" icon="hdd" @click="recycleBinVisible=true">回收站</a-button>
       <a-dropdown v-if="selectedRowKeys.length > 0">
         <a-menu slot="overlay" @click="handleMenuClick">
@@ -96,7 +96,7 @@
           <a-icon type="down" />
         </a-button>
       </a-dropdown>
-      <j-super-query :fieldList="superQueryFieldList" @handleSuperQuery="handleSuperQuery" />
+<!--      <j-super-query :fieldList="superQueryFieldList" @handleSuperQuery="handleSuperQuery" />-->
     </div>
 
     <!-- table区域-begin -->
@@ -411,12 +411,10 @@ export default {
       }
     },
     setDefaultPW() {
-      console.log('bbb')
       if (this.selectedRowKeys.length <= 0) {
         this.$message.warning('请选择一条记录！')
         return false
       } else {
-        console.log('aaa')
         this.pwVisible = true
       }
     },
@@ -429,7 +427,6 @@ export default {
     },
 
     pwSubmit() {
-      console.log(this.selectedRowKeys)
       postAction('/sys/user/changePwBatch?pwIndex=' + this.pwIndex, this.selectedRowKeys).then(res => {
         if (res.success) {
           this.$message.success(res.message)

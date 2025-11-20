@@ -6,13 +6,13 @@
         <a-row :gutter='24'>
           <a-col :xl='3' :lg='7' :md='8' :sm='24'>
             <a-form-item style='width: 150px' label='年度'>
-              <t-dict-select-tag placeholder='请选择年度' v-model='queryParam.currentYear' dictCode='assess_year' />
+              <t-dict-select-tag placeholder='请选择年度' v-model='queryParam.currentYear' dictCode='assess_year' @change="searchQuery" />
             </a-form-item>
           </a-col>
           <a-col :xl='6' :lg='7' :md='8' :sm='24'>
             <a-form-item style='width: 300px' label='领导'>
               <t-select-user-by-dep :show-btn='false' :is-scope='true' placeholder='按领导筛选' :get-leader='true'
-                                    v-model='queryParam.leader' store='id' text='realname' />
+                                    v-model='queryParam.leader' store='id' text='realname' @change="searchQuery"  />
             </a-form-item>
           </a-col>
           <a-col :xl='6' :lg='7' :md='8' :sm='24'>
@@ -45,18 +45,21 @@
         rowKey='id'
         :columns='columns'
         :dataSource='dataSource'
-        :pagination='ipagination'
+        :pagination='false'
         :loading='loading'
-        class='j-table-force-nowrap'
         @change='handleTableChange'>
 
         <template slot='bureauRec' slot-scope='text, record'>
+          <div style='font-size: 16px; line-height: 20px' v-html="text"></div>
         </template>
         <template slot='groupRec' slot-scope='text, record'>
+          <div style='font-size: 16px; line-height: 20px' v-html="text"></div>
         </template>
         <template slot='basicRec' slot-scope='text, record'>
+          <div style='font-size: 16px; line-height: 20px' v-html="text"></div>
         </template>
         <template slot='institutionRec' slot-scope='text, record'>
+          <div style='font-size: 16px; line-height: 20px' v-html="text"></div>
         </template>
 
         <!-- <template slot="status" slot-scope="text, record">
@@ -106,9 +109,9 @@
 
       </a-table>
 
-      <div v-show="!assessing" class="no-data-mask">
-        <span>当前没有正在进行中的考核</span>
-      </div>
+<!--      <div v-show="!assessing" class="no-data-mask">-->
+<!--        <span>当前没有正在进行中的考核</span>-->
+<!--      </div>-->
     </div>
 
     <assess-leader-rec-modal ref='modalForm' @ok='modalFormOk'></assess-leader-rec-modal>
@@ -336,24 +339,28 @@ export default {
         {
           title: '机关处室推优情况',
           align: 'center',
+          width: 280,
           dataIndex: 'bureauRec',
           scopedSlots: { customRender: 'bureauRec' }
         },
         {
           title: '领导班子推优情况',
           align: 'center',
+          width: 280,
           dataIndex: 'groupRec',
           scopedSlots: { customRender: 'groupRec' }
         },
         {
           title: '分局、参公推优情况',
           align: 'center',
+          width: 280,
           dataIndex: 'basicRec',
           scopedSlots: { customRender: 'basicRec' }
         },
         {
           title: '事业单位推优情况',
           align: 'center',
+          width: 280,
           dataIndex: 'institutionRec',
           scopedSlots: { customRender: 'institutionRec' }
         },

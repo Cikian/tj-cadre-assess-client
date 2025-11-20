@@ -310,6 +310,25 @@ export default {
       getAction(this.url.getLeaderData)
         .then((res) => {
           if (res.success) {
+            res.result.records.forEach((item) => {
+              if (item.rank === '二级巡视员' || item.rank === '局管总师') {
+                item.departmentCode_dictText = '总师、二巡'
+              }
+            })
+
+            res.result.records.sort((a, b) => {
+              const isTargetA = a.rank === '二级巡视员' || a.rank === '局管总师';
+              const isTargetB = b.rank === '二级巡视员' || b.rank === '局管总师';
+
+              if (isTargetA && !isTargetB) {
+                return -1; // a排在b前面
+              } else if (!isTargetA && isTargetB) {
+                return 1; // b排在a前面
+              } else {
+                return 0; // 保持原顺序
+              }
+            });
+
             // 如果dataSource中有状态为1的元素
             if (res.result.records.some((item) => item.status === '1')) {
               switch (this.jidu) {
@@ -337,6 +356,8 @@ export default {
               }
             }
             this.dataSource = res.result.records
+            console.log('》》》》》》》》》》》》》》》》》》》》》》》》》》》》》')
+            console.log(this.dataSource)
 
             // this.totalRecords = res.result.total // 获取总记录数
           } else {
@@ -503,12 +524,12 @@ export default {
             const success = responses.every((res) => res.success)
 
             if (success) {
-              message.success('所有变动已成功提交！')
+              message.success('提交成功！')
               this.modifiedRows = [] // 清空变动记录
               this.computeRemainingSeats() // 重新计算剩余名额
               this.loadData() // 重新加载数据
             } else {
-              message.error('有些变动未能成功提交，请检查。')
+              message.error('未能全部成功提交，请检查。')
             }
           }
         },
@@ -579,12 +600,12 @@ export default {
           const success = responses.every((res) => res.success)
 
           if (success) {
-            message.success('所有变动已成功提交！')
+            message.success('提交成功！')
             this.modifiedRows = [] // 清空变动记录
             this.computeRemainingSeats() // 重新计算剩余名额
             this.loadData() // 重新加载数据
           } else {
-            message.error('有些变动未能成功提交，请检查。')
+            message.error('未能全部成功提交，请检查。')
           }
         },
         onCancel: () => {

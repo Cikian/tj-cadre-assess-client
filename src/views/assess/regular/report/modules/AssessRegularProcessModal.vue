@@ -1,5 +1,6 @@
 <template>
   <t-modal
+    ref="modal"
     :title="title"
     :width="width"
     :visible="visible"
@@ -27,7 +28,7 @@
         @change="handleImportExcel"
         v-if="isImportButtonVisible"
       >
-        <a-button  type="primary" icon="import">导入</a-button>
+        <a-button  type="primary" icon="import" :loading="btnLoading">导入</a-button>
       </a-upload>
       <a style="display: inline-block; margin-left: 20px;margin-top: 12px;" v-if="showresult" @click="showtable = true"
       >解析成功{{itemList.length}}条，点击查看结果</a>
@@ -130,6 +131,7 @@ export default {
   },
   data() {
     return {
+      btnLoading: false,
       title: '',
       newlist: [],
       width: 900,
@@ -266,6 +268,8 @@ export default {
       this.close()
     },
     handleImportExcel(info) {
+      this.btnLoading = true
+      this.$refs.modal.passBtnLoading = true
       if (info.file.status === 'done') {
         // this.$message.success(`${info.file.name} 文件上传成功`)
         const mess = `${info.file.name} 考核人员解析成功`
@@ -281,6 +285,8 @@ export default {
         // this.showtable = true
         this.showresult = true
         this.$bus.$emit('updateReportItems', info.file.response.result)
+        this.btnLoading = false
+        this.$refs.modal.passBtnLoading = false
       } else if (info.file.status === 'error') {
         // this.$message.error(`${info.file.name} 文件上传失败.`)
         const messs = `${info.file.name} 文件上传失败.`
@@ -292,6 +298,8 @@ export default {
         //   onCancel: () => {
         //   }
         // })
+        this.btnLoading = false
+        this.$refs.modal.passBtnLoading = false
         this.$error({
           title: '错误',
           content: messs

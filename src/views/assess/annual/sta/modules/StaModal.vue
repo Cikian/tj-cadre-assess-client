@@ -305,8 +305,6 @@ export default {
     downloadExcel() {
       this.loading = true
 
-      console.log(this.queryParams)
-
       let desc = '参考范围：'
       if (this.queryParam.trial) {
         desc += '试用期人员考核单元内排名变化'
@@ -386,10 +384,6 @@ export default {
       })
     },
     edit(record, queryParam) {
-      console.log("Fuck GBKH!!")
-      console.log(record)
-      console.log(queryParam)
-
       queryParam.appraisee = record.appraisee
       this.queryParam = queryParam
       this.visible = true
@@ -495,8 +489,6 @@ export default {
       var params = this.getQueryParams()//查询条件
 
       getAction('/modules/annual/democraticSummary/data2', params).then(res => {
-        console.log('data2')
-        console.log(res)
         if (res.success) {
           let data = res.result
 
@@ -523,8 +515,6 @@ export default {
       var params = this.getQueryParams()//查询条件
 
       getAction('/modules/annual/democraticSummary/data3', params).then(res => {
-        console.log('data3')
-        console.log(res)
         if (res.success) {
           let data = res.result
 
@@ -551,8 +541,6 @@ export default {
       var params = this.getQueryParams()//查询条件
 
       getAction('/modules/annual/democraticSummary/data4', params).then(res => {
-        console.log('data4')
-        console.log(res)
         if (res.success) {
           let data = res.result
 

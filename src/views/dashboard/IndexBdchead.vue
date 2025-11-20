@@ -519,7 +519,6 @@ export default {
   created() {
     // 获取接口信息
     getAction('/regular/report/getPartial').then(res => {
-      console.log('1114', res)
       this.regularIndexEmployeelist = res.result.regularIndexEmployee
       this.businessIndexEmployeelist = res.result.businessIndexEmployee
       this.annualIndexEmployeelist = res.result.annualIndexEmployee
@@ -530,11 +529,9 @@ export default {
       }
       if (res.result.businessIndexEmployee) {
         this.dataSource2 = res.result.businessIndexEmployee.reports
-        console.log('1114222', this.dataSource2)
       }
       if (res.result.reportIndexEmployee) {
         this.dataSource3 = res.result.reportIndexEmployee.reports
-        console.log('1114333', this.dataSource3)
       }
       if (res.result.annualIndexEmployee) {
         this.dataSource4 = res.result.annualIndexEmployee.reports
@@ -564,8 +561,6 @@ export default {
         text = text.substring(0, text.indexOf(','))
       }
       let url = getFileAccessHttpUrl(text)
-      console.log("获取url")
-      console.log(url)
       window.open(url)
     },
     passAudit(record) {
@@ -573,7 +568,6 @@ export default {
       getAction(`/modules/annual/assessAnnualNegativeList/passOrDelete?id=${record.id}&var=1`).then(res => {
         if (res.success) {
           this.$message.success('操作成功')
-          console.log('1225', res)
         }
       })
       this.openNegativeListModal()
@@ -627,8 +621,6 @@ export default {
     },
     checkCanFillNegative() {
       getAction('/common/canFillNegative').then((res) => {
-        console.log('|||||||||||||||||||||||||||||||||||||||||||||||||||')
-        console.log(res)
         if (res.success) {
           this.canFillNegative = res.result
         }

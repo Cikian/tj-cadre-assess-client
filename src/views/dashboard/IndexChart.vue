@@ -2,7 +2,7 @@
   <div class='page-header-index-wide'>
     <div style='font-weight: 700;font-size: 25px;margin: 10px 10px;display: flex;align-items: center;'>
       <img style='width: 35px;height: 25px;margin: 5px 5px;' src='../../assets/list.png' alt=''>
-      当前考核填报进度
+      当前考核
     </div>
     <a-row :gutter='24'>
       <!-- <a-col :sm="24" :md="12" :xl="6" :style="{ marginBottom: '24px' }">
@@ -912,8 +912,6 @@ export default {
 
     getAction('/modules/report/assessReportArrange/getScope').then((res) => {
       if (res.success) {
-        console.log('res', res)
-
         this.scope = res.result
       }
     })
@@ -921,14 +919,12 @@ export default {
   watch: {
     form: {
       handler(newValue) {
-        console.log('撒旦:', newValue) // 打印接收到的新模型数据
         this.head['year'] = newValue.currentYear
         this.head['X-Access-Token'] = Vue.ls.get(ACCESS_TOKEN)
         let tenantid = Vue.ls.get(TENANT_ID)
         if (tenantid) {
           this.head['tenant-id'] = tenantid
         }
-        console.log('最新headrrrrr', this.head)
       },
       immediate: true,
       deep: true
@@ -944,8 +940,6 @@ export default {
         text = text.substring(0, text.indexOf(','))
       }
       let url = getFileAccessHttpUrl(text)
-      console.log('获取url')
-      console.log(url)
       window.open(url)
     },
     yearChange() {
@@ -976,7 +970,6 @@ export default {
     },
 
     initReportAssess() {
-      console.log('执行initAssess')
       let date = new Date()
       let year = date.getFullYear()
       this.form3.assessName = year + '年一报告两评议'
@@ -991,7 +984,6 @@ export default {
     },
     loadData() {
       getAction('/regular/report/getIndexInfo').then(res => {
-        console.log('1114', res)
         this.regularIndexLeaderlist = res.result.regularIndexLeader
         this.businessIndexLeaderlist = res.result.businessIndexLeader
         this.annualIndexLeaderlist = res.result.annualIndexLeader
@@ -1001,11 +993,9 @@ export default {
         }
         if (res.result.businessIndexLeader) {
           this.dataSource2 = res.result.businessIndexLeader.reports
-          console.log('1114222', this.dataSource2)
         }
         if (res.result.reportIndexLeader) {
           this.dataSource3 = res.result.reportIndexLeader.reports
-          console.log('1114333', this.dataSource3)
         }
         if (res.result.annualIndexLeader) {
           this.dataSource4 = res.result.annualIndexLeader.reports
@@ -1031,8 +1021,6 @@ export default {
       this.btnLoading = true
       this.$refs.ruleForm2.validate((valid) => {
         if (valid) {
-          console.log('submit!!')
-          console.log(this.form2)
           submitBusinessFill(this.form2).then((res) => {
             if (res.success) {
               this.addAssessVisible = false
@@ -1137,7 +1125,6 @@ export default {
     },
 
     initBusinessAssess() {
-      console.log('执行initAssess')
       let date = new Date()
       let year = date.getFullYear()
       this.form2.assessName = year + '年业务工作测评'
@@ -1244,8 +1231,6 @@ export default {
     },
 
     handleImportExcel(info) {
-      console.log('山川后')
-      console.log(info)
       if (info.file.status === 'done' && info.file.response.success) {
         const mes = `${info.file.name} 文件解析成功`
         this.$success({

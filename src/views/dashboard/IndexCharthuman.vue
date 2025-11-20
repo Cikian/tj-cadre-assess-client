@@ -2,7 +2,7 @@
   <div class="page-header-index-wide">
     <div style="font-weight: 700;font-size: 30px;margin: 10px 10px;display: flex;align-items: center;">
       <img style="width: 35px;height: 35px;margin: 5px 5px;" src="../../assets/list.png" alt="">
-      当前考核填报进度
+      当前考核
     </div>
     <a-row :gutter="24">
 

@@ -786,7 +786,6 @@ export default {
     },
 
     openExportPeople() {
-      console.log("点击后第一")
       this.$refs.exportModal.initData()
       this.$refs.exportModal.visible = true
     },

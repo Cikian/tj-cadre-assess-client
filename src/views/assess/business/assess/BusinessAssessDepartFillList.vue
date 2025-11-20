@@ -40,7 +40,7 @@
 
     <!-- 操作按钮区域 -->
     <div class="table-operator">
-      <a-button @click="initAssess" type="primary" icon="plus" v-has="'gbc:admin'">发起业务工作测评</a-button>
+<!--      <a-button @click="initAssess" type="primary" icon="plus" v-has="'gbc:admin'">发起业务工作测评</a-button>-->
       <!-- TODO 未生效-->
       <!--      <a-button type="primary" icon="download" v-has="'gbc:admin'">导出</a-button>-->
     </div>

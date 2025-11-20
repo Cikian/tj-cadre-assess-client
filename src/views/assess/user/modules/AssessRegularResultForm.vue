@@ -24,8 +24,8 @@
             </a-form-model-item>
           </a-col>
           <a-col :span="12">
-            <a-form-model-item label="是否处级领导" :labelCol="labelCol" :wrapperCol="wrapperCol" prop="isLeader">
-              <j-dict-select-tag type="list" v-model="model.isLeader" dictCode="yn" placeholder="请选择是否处级领导" disabled/>
+            <a-form-model-item label="是否局领导考核" :labelCol="labelCol" :wrapperCol="wrapperCol" prop="isLeader">
+              <j-dict-select-tag type="list" v-model="model.isLeader" dictCode="yn" placeholder="请选择是否局领导考核" disabled/>
             </a-form-model-item>
           </a-col>
           <a-col :span="12">

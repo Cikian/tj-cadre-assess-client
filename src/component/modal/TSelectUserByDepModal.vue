@@ -215,8 +215,6 @@ export default {
       }
       let params = this.getQueryParams()//查询条件
       this.loading = true
-      console.log('选择用户弹窗参数>>>>>>>>>>>>')
-      console.log(params)
       getAction('/common/queryUserComponentData', params).then(res => {
         if (res.success) {
           this.dataSource = res.result.records
