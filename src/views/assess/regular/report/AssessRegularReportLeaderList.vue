@@ -27,7 +27,7 @@
         <div>
           <div>
             <span style="color: rgb(37, 79, 240); font-family: HarmonyOS Sans; font-size: 30px; font-weight: 700">
-              {{ remainingQuota }}
+              {{ accessAll ? '∞' : remainingQuota }}
             </span>
             <span style="color: rgb(126, 134, 158); font-family: 思源黑体; font-size: 14px; font-weight: 400">
               人
@@ -221,7 +221,8 @@ export default {
       totalQuota: 0,
       remainingQuota: 0,
       modifiedRows: [], // 存储变动的记录
-      jidu: ''
+      jidu: '',
+      accessAll: false
     }
   },
   created() {
@@ -384,7 +385,7 @@ export default {
       let cellValue = row[field]
 
       // 检查用户选择的值是否为“好”
-      if (cellValue === 'A' && this.remainingQuota <= 0) {
+      if (cellValue === 'A' && this.remainingQuota <= 0 && !this.accessAll) {
         let that = this
         // 提示用户没有剩余名额
         // 提示用户没有剩余名额
@@ -528,8 +529,10 @@ export default {
               this.modifiedRows = [] // 清空变动记录
               this.computeRemainingSeats() // 重新计算剩余名额
               this.loadData() // 重新加载数据
+              this.accessAll = false
             } else {
               message.error('未能全部成功提交，请检查。')
+              this.accessAll = false
             }
           }
         },
@@ -557,7 +560,7 @@ export default {
     },
 
     // 查询四个季度都不是“A”的记录
-    showNonGoodRecords() {
+    async showNonGoodRecords() {
       const nonGoodRecords = this.dataSource.filter(
         (record) =>
           record.quarter1 !== 'A' && record.quarter2 !== 'A' && record.quarter3 !== 'A' && record.quarter4 !== 'A'
@@ -565,61 +568,87 @@ export default {
 
       // 如果没有找到记录
       if (nonGoodRecords.length === 0) {
-        message.info('没有找到四个季度成绩都不是“A”的记录。')
-        return
-      }
 
-      // 将姓名用“、”连接
-      const names = nonGoodRecords.map((record) => record.name).join('、')
-
-      // 构建清单内容
-      const confirmationContent = (
-        <div>
-          <p>以下人员四个季度均未被评为“好”等次：{names}，年度考核无评优资格！</p>
-        </div>
-      )
-
-      // 显示弹窗
-      Modal.confirm({
-        title: '四个季度平时考核成绩都无“好”等次的人员清单',
-        content: confirmationContent,
-        width: 800,
-        okText: '确认',
-        cancelText: '重新测评',
-        onOk: async () => {
-          // 提交数据逻辑
-          const promises = this.modifiedRows.map((modifiedRow) => {
-            return putAction(this.url.editLeader, {
-              id: modifiedRow.id,
-              field: modifiedRow.field,
-              value: modifiedRow.value
-            })
+        // 提交数据逻辑
+        const promises = this.modifiedRows.map((modifiedRow) => {
+          return putAction(this.url.editLeader, {
+            id: modifiedRow.id,
+            field: modifiedRow.field,
+            value: modifiedRow.value
           })
+        })
 
-          const responses = await Promise.all(promises)
-          const success = responses.every((res) => res.success)
+        const responses = await Promise.all(promises)
+        const success = responses.every((res) => res.success)
 
-          if (success) {
-            message.success('提交成功！')
-            this.modifiedRows = [] // 清空变动记录
-            this.computeRemainingSeats() // 重新计算剩余名额
-            this.loadData() // 重新加载数据
-          } else {
-            message.error('未能全部成功提交，请检查。')
-          }
-        },
-        onCancel: () => {
-          // 重新测评时的处理逻辑，返回到请确认信息清单
-          this.submitChanges() // 重新打开确认信息清单
-          this.columns.forEach(column => {
-            if (column.hasOwnProperty('disabled')) {
-              this.$set(column, 'disabled', false)
-            }
-          })
-          this.modifiedRows = []
-          this.shouldDisableTableAndButton = false
+        if (success) {
+          message.success('提交成功！')
+          this.modifiedRows = [] // 清空变动记录
+          this.computeRemainingSeats() // 重新计算剩余名额
+          this.loadData() // 重新加载数据
+          this.accessAll = false
+          return
+        } else {
+          message.error('未能全部成功提交，请检查。')
+          this.accessAll = false
+          return
         }
-      })
+      } else {
+        // 将姓名用“、”连接
+        const names = nonGoodRecords.map((record) => record.name).join('、')
+
+        // 构建清单内容
+        const confirmationContent = (
+          <div>
+            <p>以下人员四个季度均未被评为“好”等次：{names}，年度考核无评优资格！</p>
+          </div>
+        )
+
+        // 显示弹窗
+        Modal.confirm({
+          title: '四个季度平时考核成绩都无“好”等次的人员清单',
+          content: confirmationContent,
+          width: 800,
+          okText: '确认',
+          cancelText: '重新测评',
+          onOk: async () => {
+            // 提交数据逻辑
+            const promises = this.modifiedRows.map((modifiedRow) => {
+              return putAction(this.url.editLeader, {
+                id: modifiedRow.id,
+                field: modifiedRow.field,
+                value: modifiedRow.value
+              })
+            })
+
+            const responses = await Promise.all(promises)
+            const success = responses.every((res) => res.success)
+
+            if (success) {
+              message.success('提交成功！')
+              this.modifiedRows = [] // 清空变动记录
+              this.computeRemainingSeats() // 重新计算剩余名额
+              this.loadData() // 重新加载数据
+              this.accessAll = false
+            } else {
+              message.error('未能全部成功提交，请检查。')
+              this.accessAll = false
+            }
+          },
+          onCancel: () => {
+            // // 重新测评时的处理逻辑，返回到请确认信息清单
+            // this.submitChanges() // 重新打开确认信息清单
+            // this.columns.forEach(column => {
+            //   if (column.hasOwnProperty('disabled')) {
+            //     this.$set(column, 'disabled', false)
+            //   }
+            // })
+            // this.modifiedRows = []
+            this.shouldDisableTableAndButton = false
+            this.accessAll = true
+          }
+        })
+      }
     },
     computeRemainingSeats() {
       // 计算剩余座位数

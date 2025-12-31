@@ -4,6 +4,7 @@ export async function getDictItemByCode(code) {
   try {
     const res = await getDictItems(code)
     if (res.success) {
+      console.log("请求成功")
       return res.result
     } else {
       throw new Error('Failed to fetch dictionary items')

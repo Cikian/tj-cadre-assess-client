@@ -421,7 +421,7 @@ export default {
       //清空列表选中
       this.onClearSelected()
 
-      this.getStatisticsCounts()
+      this.getStatisticsCounts(this.queryParam.departType)
     },
 
     exportModalOk() {

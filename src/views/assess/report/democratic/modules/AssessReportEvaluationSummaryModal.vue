@@ -34,7 +34,7 @@
                   <div v-if="item.inputType === '1'" style='display: flex;'>
                     <div class='options'>
                       好 <span style='color: #4a4a48; font-size: 16px'>（共{{ getOptionNum(item, 'A')
-                      }}票，占比{{ getOptionRatio(item, 'A') }}%）</span>
+                      }}票，占比{{ getOptionRatio(item, 'A') }}%<span v-if="getItemsA(item, 'A') > 0" style='font-weight: bold'>，其中A票数量：{{getItemsA(item, 'A')}}</span>）</span>
                     </div>
                     <div class='options'>
                       较好<span style='color: #4a4a48; font-size: 16px'>（共{{ getOptionNum(item, 'B')

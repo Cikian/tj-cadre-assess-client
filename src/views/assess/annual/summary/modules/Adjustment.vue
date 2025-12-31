@@ -280,7 +280,7 @@
 
 <script>
 import TModal from '@/component/TModal.vue'
-import { deleteAction, getAction, postAction } from '@/api/manage'
+import { deleteAction, getAction, postAction, putAction } from '@/api/manage'
 import { getAssessingInfo, searchUser } from '@/api/assessApis'
 import TSelectDepartModal from '@/component/modal/TSelectDepartModal.vue'
 import moment from 'moment'
@@ -585,7 +585,7 @@ export default {
           content: `您确定要删除这些记录吗？将删除 ${idsToDelete.length} 条记录。`,
           onOk: () => {
             // 发送删除请求到后端，直接将 idsToDelete 作为请求体
-            deleteAction('/modules/annual/assessAnnualFill/deleteAdjustment', idsToDelete)
+            putAction('/modules/annual/assessAnnualFill/deleteAdjustment', idsToDelete)
               .then((response) => {
                 // 检查响应是否成功
                 if (response.success) {
