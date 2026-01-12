@@ -136,7 +136,7 @@
             </template>
 
             <template slot="scopeRanking2" slot-scope="text, record">
-              <span>{{ record.type === '32' && record.departType !== 'bureau' ? text : '' }}</span>
+              <span>{{ (record.type === '32' || record.type === '23') && record.departType !== 'bureau' ? text : '' }}</span>
             </template>
 
             <template slot="scopeRanking3" slot-scope="text, record">
@@ -153,7 +153,7 @@
             </template>
 
             <template slot="ranking2" slot-scope="text, record">
-              <span>{{ record.type === '32' && record.departType !== 'bureau' ? text : '' }}</span>
+              <span>{{ (record.type === '32' || record.type === '23') && record.departType !== 'bureau' ? text : '' }}</span>
             </template>
 
             <template slot="ranking3" slot-scope="text, record">

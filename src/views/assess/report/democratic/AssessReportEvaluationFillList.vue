@@ -234,7 +234,8 @@ export default {
         deadline: [{ required: true, message: '请选择截止日期', trigger: 'change' }]
       },
       labelCol: { span: 6 },
-      wrapperCol: { span: 14 }
+      wrapperCol: { span: 14 },
+      userInfo: {}
     }
   },
   created() {
@@ -246,6 +247,12 @@ export default {
         this.anonymousUserList = []
       }
     })
+
+    this.userInfo = JSON.parse(localStorage.getItem("pro__Login_Userinfo")).value
+
+    if (this.userInfo.realname === '匿名用户') {
+      this.columns = this.columns.filter(e => (e.title !== '填报状态'))
+    }
   },
   computed: {
     importExcelUrl: function() {

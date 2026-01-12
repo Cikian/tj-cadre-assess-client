@@ -82,11 +82,11 @@
               </template>
 
               <template slot='originalPosition' slot-scope='text, record, index'>
-                {{ text }}
+                {{ text }} （{{record.originalDate}}）
               </template>
 
               <template slot='currentPosition' slot-scope='text, record, index'>
-                {{ text }}
+                {{ text }} （{{record.curDate}}）
               </template>
 
               <template slot='operation' slot-scope='text, record, index'>

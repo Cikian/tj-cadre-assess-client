@@ -4,7 +4,7 @@
       <div class='table-page-search-wrapper'>
       </div>
       <!-- 查询区域-END -->
-  
+
       <!-- 操作按钮区域 -->
       <div class='table-operator'>
   <!--      <a-button @click='initDemocratic' v-has="'gbc:admin'" type='primary' icon='plus'>发起一报告两评议民主测评</a-button>-->
@@ -13,7 +13,7 @@
   <!--      </a-button-->
   <!--      >-->
       </div>
-  
+
       <!-- table区域-begin -->
       <div>
         <a-table
@@ -39,7 +39,7 @@
               </a-tag>
             </div>
           </template>
-  
+
           <template slot='htmlSlot' slot-scope='text'>
             <div v-html='text'></div>
           </template>
@@ -60,14 +60,14 @@
               下载
             </a-button>
           </template>
-  
+
           <span slot='action' slot-scope='text, record'>
             <a @click='handleEdit(record)'>测评</a>
           </span>
         </a-table>
       </div>
-  
-  
+
+
       <t-modal
         :visible='anonymousUserVisible'
         title='一报告两评议民主评议匿名账号'
@@ -80,11 +80,11 @@
         <a-table :columns='userColumns' :dataSource='anonymousUserList' :pagination='false' :scroll='{ y: 500 }'>
         </a-table>
       </t-modal>
-  
+
       <assess-report-evaluation-fill-modal ref='modalForm' @ok='modalFormOk' />
     </a-card>
   </template>
-  
+
   <script>
   import { JeecgListMixin } from '@/mixins/JeecgListMixin'
   import AssessReportEvaluationFillModal from '../assess/report/democratic/modules/AssessReportEvaluationFillModal.vue'
@@ -95,7 +95,7 @@
   import tjTitle from '@/component/TjTitle'
   import { axios } from '@/utils/assessReq'
   import TDictSelectTag from '@/component/TDictSelectTag.vue'
-  
+
   export default {
     name: 'AssessReportEvaluationFillList',
     mixins: [JeecgListMixin],
@@ -186,7 +186,7 @@
             dataIndex: 'pwdPlainText'
           }
         ],
-  
+
         url: {
           list: '/modules/report/reportDemocratic/list',
           delete: '/modules/report/reportDemocratic/delete',
@@ -209,7 +209,8 @@
           deadline: [{ required: true, message: '请选择截止日期', trigger: 'change' }]
         },
         labelCol: { span: 6 },
-        wrapperCol: { span: 14 }
+        wrapperCol: { span: 14 },
+        userInfo: {}
       }
     },
     created() {
@@ -223,6 +224,12 @@
           this.anonymousUserList = []
         }
       })
+      this.userInfo = JSON.parse(localStorage.getItem("pro__Login_Userinfo")).value
+
+      if (this.userInfo.realname === '匿名用户') {
+        this.columns = this.columns.filter(e => (e.title !== '填报状态'))
+      }
+
     },
     computed: {
       importExcelUrl: function() {
@@ -341,7 +348,7 @@
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     pointer-events: auto;
   }
-  
+
   /deep/ .ant-modal-header {
     padding: 16px 24px;
     color: rgba(0, 0, 0, 0.65);
@@ -349,14 +356,14 @@
     border-bottom: 0px solid #e8e8e8;
     border-radius: 4px 4px 0 0;
   }
-  
+
   /deep/ .ant-form-horizontal {
     position: relative;
     background-color: white;
     border: 1px solid rgb(234, 235, 234);
     padding: 10px 0px;
   }
-  
+
   /deep/ .ant-modal-footer {
     padding: 10px 16px;
     text-align: right;
@@ -364,7 +371,7 @@
     border-top: 0px solid #e8e8e8;
     border-radius: 0 0 4px 4px;
   }
-  
+
   /deep/ .ant-form-item label {
     position: relative;
     margin-right: 10px;
@@ -377,7 +384,6 @@
     width: 90px;
     min-width: 90px;
   }
-  
+
   @import '~@assets/less/common.less';
   </style>
-  

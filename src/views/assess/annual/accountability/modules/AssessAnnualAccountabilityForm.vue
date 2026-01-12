@@ -97,7 +97,7 @@
 <!--          </a-col>-->
           <a-col :span="12">
             <a-form-model-item label="证明材料" :labelCol="labelCol" :wrapperCol="wrapperCol" prop="proof">
-              <j-upload :biz-path='"/annual/accountability"' v-model="model.proof"></j-upload>
+              <j-upload :multiple="false" :biz-path='"/annual/accountability"' v-model="model.proof"></j-upload>
             </a-form-model-item>
           </a-col>
         </a-row>

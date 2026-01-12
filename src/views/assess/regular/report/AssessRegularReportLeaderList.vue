@@ -271,22 +271,6 @@ export default {
         document.activeElement.blur(); // 使当前聚焦元素失焦
       }
     },
-    showInitialMessage() {
-      Modal.info({
-        title: '提示',
-        content: (
-          <div>
-            <p>四个季度平时考核至少有一个为“好”，年度考核才有评优资格。</p>
-          </div>
-        ),
-        okText: '知道了',
-        onOk() {
-          // 用户点击确认后的处理
-        }
-      })
-    },
-    initDictConfig() {
-    },
     getSuperFieldList() {
       let fieldList = []
       fieldList.push({ type: 'string', value: 'name', text: '姓名', dictCode: 'sys_user,realname,id' })
@@ -357,9 +341,7 @@ export default {
               }
             }
             this.dataSource = res.result.records
-            console.log('》》》》》》》》》》》》》》》》》》》》》》》》》》》》》')
-            console.log(this.dataSource)
-
+            this.updateRemainingQuota()
             // this.totalRecords = res.result.total // 获取总记录数
           } else {
             this.$error({ title: '数据查询失败', content: res.message })
@@ -542,6 +524,9 @@ export default {
       })
     },
     updateRemainingQuota() {
+      if (this.dataSource.length === 0) {
+        return
+      }
       const currentQuarterColumn = this.columns.find((col) => col.disabled === false) // 获取当前季度的列对象
       // 检查当前季度列是否存在
       if (!currentQuarterColumn) {
@@ -550,7 +535,10 @@ export default {
       }
       const currentQuarterDataIndex = currentQuarterColumn.key // 当前季度的数据索引
       // 统计当前季度“好”的数量
+      console.table(this.dataSource)
       const goodCount = this.dataSource.filter((row) => row[currentQuarterDataIndex] === 'A').length
+      console.log("currentQuarterDataIndex: ", currentQuarterDataIndex)
+      console.log("goodCount: ", goodCount)
       // 更新 remainingQuota
       if (this.totalQuota - goodCount >= 0) {
         this.remainingQuota = this.totalQuota - goodCount
@@ -655,6 +643,9 @@ export default {
       getAction(this.url.getComputeRemainingSeats).then((res) => {
         this.totalQuota = res.totalQuota
         this.remainingQuota = res.remainingQuota < 0 ? 0 : res.remainingQuota
+        console.log("total: ", this.totalQuota)
+        console.log("remainingQuota: ", this.remainingQuota)
+        this.updateRemainingQuota()
       })
     }
   }

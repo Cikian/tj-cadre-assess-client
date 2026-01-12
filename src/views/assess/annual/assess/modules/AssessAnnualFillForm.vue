@@ -19,8 +19,10 @@
           <tr>
             <td>被考核对象</td>
             <td>{{ leaderNames }}</td>
-            <td v-if='model.auditBy'>审核人</td>
-            <td v-if='model.auditBy'>{{ model.auditBy }}</td>
+<!--            <td v-if='model.auditBy'>审核人</td>-->
+<!--            <td v-if='model.auditBy'>{{ model.auditBy }}</td>-->
+            <td v-if='model.remark' style="color: #ff3838">退回原因</td>
+            <td v-if='model.remark' style="color: #ff3838">{{ model.remark }}</td>
           </tr>
         </table>
 
