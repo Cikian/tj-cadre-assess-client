@@ -1,45 +1,51 @@
 <template>
-  <div :id='containerId' style='position: relative'>
-
+  <div :id="containerId" style="position: relative">
     <!--  ---------------------------- begin 图片左右换位置 ------------------------------------- -->
-    <div class='movety-container' :style="{top:top+'px',left:left+'px',display:moveDisplay}"
-         style='padding:0 8px;position: absolute;z-index: 91;height: 32px;width: 104px;text-align: center;'>
-      <div :id="containerId+'-mover'" :class="showMoverTask?'uploadty-mover-mask':'movety-opt'"
-           style='margin-top: 12px'>
-        <a @click='moveLast' style='margin: 0 5px;'>
-          <a-icon type='arrow-left' style='color: #fff;font-size: 16px' />
+    <div
+      class="movety-container"
+      :style="{ top: top + 'px', left: left + 'px', display: moveDisplay }"
+      style="padding: 0 8px; position: absolute; z-index: 91; height: 32px; width: 104px; text-align: center"
+    >
+      <div
+        :id="containerId + '-mover'"
+        :class="showMoverTask ? 'uploadty-mover-mask' : 'movety-opt'"
+        style="margin-top: 12px"
+      >
+        <a @click="moveLast" style="margin: 0 5px">
+          <a-icon type="arrow-left" style="color: #fff; font-size: 16px" />
         </a>
-        <a @click='moveNext' style='margin: 0 5px;'>
-          <a-icon type='arrow-right' style='color: #fff;font-size: 16px' />
+        <a @click="moveNext" style="margin: 0 5px">
+          <a-icon type="arrow-right" style="color: #fff; font-size: 16px" />
         </a>
       </div>
     </div>
     <!--  ---------------------------- end 图片左右换位置 ------------------------------------- -->
 
     <a-upload
-      v-if='!dragger'
-      name='file'
-      :multiple='multiple'
-      :action='uploadAction'
-      :headers='headers'
-      :data="{'biz':bizPath}"
-      :fileList='fileList'
-      :beforeUpload='doBeforeUpload'
-      @change='handleChange'
-      :disabled='disabled'
-      :returnUrl='returnUrl'
-      :listType='complistType'
-      :accept='accept'
-      :number='number'
-      @preview='handlePreview'
-      :class="{'uploadty-disabled':disabled}">
+      v-if="!dragger"
+      name="file"
+      :multiple="multiple"
+      :action="uploadAction"
+      :headers="headers"
+      :data="{ biz: bizPath }"
+      :fileList="fileList"
+      :beforeUpload="doBeforeUpload"
+      @change="handleChange"
+      :disabled="disabled"
+      :returnUrl="returnUrl"
+      :listType="complistType"
+      :accept="accept"
+      :number="number"
+      @preview="handlePreview"
+      :class="{ 'uploadty-disabled': disabled }"
+    >
       <template>
-        <div v-if='isImageComp'>
-          <a-icon type='plus' />
-          <div class='ant-upload-text'>{{ text }}</div>
+        <div v-if="isImageComp">
+          <a-icon type="plus" />
+          <div class="ant-upload-text">{{ text }}</div>
         </div>
-        <a-button v-else-if='buttonVisible'>
-          <a-icon type='upload' />
+        <a-button v-else-if="buttonVisible">
+          <a-icon type="upload" />
           {{ text }}
         </a-button>
       </template>
@@ -47,35 +53,35 @@
 
     <a-upload-dragger
       v-else
-      name='file'
-      :multiple='multiple'
-      :action='uploadAction'
-      :headers='headers'
-      :data="{'biz':bizPath}"
-      :fileList='fileList'
-      :beforeUpload='doBeforeUpload'
-      @change='handleChange'
-      :disabled='disabled'
-      :returnUrl='returnUrl'
-      :listType='complistType'
-      @preview='handlePreview'
-      :class="{'uploadty-disabled':disabled}">
-      <p class='ant-upload-drag-icon'>
-        <a-icon type='inbox' />
+      name="file"
+      :multiple="multiple"
+      :action="uploadAction"
+      :headers="headers"
+      :data="{ biz: bizPath }"
+      :fileList="fileList"
+      :beforeUpload="doBeforeUpload"
+      @change="handleChange"
+      :disabled="disabled"
+      :returnUrl="returnUrl"
+      :listType="complistType"
+      @preview="handlePreview"
+      :class="{ 'uploadty-disabled': disabled }"
+    >
+      <p class="ant-upload-drag-icon">
+        <a-icon type="inbox" />
       </p>
-      <p class='ant-upload-text'>
+      <p class="ant-upload-text">
         {{ tipText }}
       </p>
     </a-upload-dragger>
 
-    <a-modal :visible='previewVisible' :footer='null' @cancel='handleCancel'>
-      <img alt='example' style='width: 100%' :src='previewImage' />
+    <a-modal :visible="previewVisible" :footer="null" @cancel="handleCancel">
+      <img alt="example" style="width: 100%" :src="previewImage" />
     </a-modal>
   </div>
 </template>
 
 <script>
-
 import Vue from 'vue'
 import { ACCESS_TOKEN } from '@/store/mutation-types'
 import { getFileAccessHttpUrl } from '@/api/manage'
@@ -111,7 +117,7 @@ export default {
       moveDisplay: 'none',
       showMoverTask: false,
       moverHold: false,
-      currentImg: ''
+      currentImg: '',
       //---------------------------- end 图片左右换位置 -------------------------------------
     }
   },
@@ -119,27 +125,27 @@ export default {
     type: {
       type: String,
       required: false,
-      default: "annual"
+      default: 'annual',
     },
     dragger: {
       type: Boolean,
       required: false,
-      default: false
+      default: false,
     },
-    text:{
-      type:String,
-      required:false,
-      default:"点击上传"
+    text: {
+      type: String,
+      required: false,
+      default: '点击上传',
     },
-    tipText:{
-      type:String,
-      required:false,
-      default:"点击此处选择文件或直接将文件拖到此处上传"
+    tipText: {
+      type: String,
+      required: false,
+      default: '点击此处选择文件或直接将文件拖到此处上传',
     },
     fileType: {
       type: String,
       required: false,
-      default: FILE_TYPE_ALL
+      default: FILE_TYPE_ALL,
     },
     allowType: {
       type: Array,
@@ -149,24 +155,24 @@ export default {
     bizPath: {
       type: String,
       required: false,
-      default: 'temp'
+      default: 'temp',
     },
     value: {
       type: [String, Array],
-      required: false
+      required: false,
     },
     // update-begin- --- author:wangshuai ------ date:20190929 ---- for:Jupload组件增加是否能够点击
     disabled: {
       type: Boolean,
       required: false,
-      default: false
+      default: false,
     },
     // update-end- --- author:wangshuai ------ date:20190929 ---- for:Jupload组件增加是否能够点击
     //此属性被废弃了
     triggerChange: {
       type: Boolean,
       required: false,
-      default: false
+      default: false,
     },
     /**
      * update -- author:lvdandan -- date:20190219 -- for:Jupload组件增加是否返回url，
@@ -176,36 +182,36 @@ export default {
     returnUrl: {
       type: Boolean,
       required: false,
-      default: true
+      default: true,
     },
     number: {
       type: Number,
       required: false,
-      default: 1
+      default: 1,
     },
     buttonVisible: {
       type: Boolean,
       required: false,
-      default: true
+      default: true,
     },
     multiple: {
       type: Boolean,
-      default: true
+      default: true,
     },
     beforeUpload: {
-      type: Function
+      type: Function,
     },
     deorper: {
       type: String,
-      required: false
+      required: false,
     },
     logal: {
       type: String,
-      required: false
+      required: false,
     },
     accept: {
       type: String,
-      required: false
+      required: false,
     },
   },
   watch: {
@@ -217,13 +223,13 @@ export default {
           if (this.returnUrl) {
             this.initFileList(val.join(','))
           } else {
-            this.initFileListArr(val);
+            this.initFileListArr(val)
           }
         } else {
           this.initFileList(val)
         }
-      }
-    }
+      },
+    },
   },
   computed: {
     isImageComp() {
@@ -231,20 +237,20 @@ export default {
     },
     complistType() {
       return this.fileType === FILE_TYPE_IMG ? 'picture-card' : 'text'
-    }
+    },
   },
   created() {
     const token = Vue.ls.get(ACCESS_TOKEN)
-    this.headers = { 'X-Access-Token': token}
+    this.headers = { 'X-Access-Token': token }
     //---------------------------- begin 图片左右换位置 -------------------------------------
-    getAssessingInfo(this.type).then(res => {
+    getAssessingInfo(this.type).then((res) => {
       if (res.success) {
         let data = res.result
         let var1 = encodeURIComponent(this.logal)
         if (!this.logal) {
-          this.headers = { 'X-Access-Token': token, 'year': data.currentYear }
+          this.headers = { 'X-Access-Token': token, year: data.currentYear }
         } else {
-          this.headers = { 'X-Access-Token': token, 'year': data.currentYear, 'people': var1 }
+          this.headers = { 'X-Access-Token': token, year: data.currentYear, people: var1 }
         }
       }
       console.log('jeupload头', this.headers)
@@ -270,8 +276,8 @@ export default {
           url: url,
           response: {
             status: 'history',
-            message: val[a].filePath
-          }
+            message: val[a].filePath,
+          },
         })
       }
       this.fileList = fileList
@@ -296,8 +302,8 @@ export default {
           url: url,
           response: {
             status: 'history',
-            message: arr[a]
-          }
+            message: arr[a],
+          },
         })
       }
       this.fileList = fileList
@@ -326,7 +332,7 @@ export default {
       this.$emit('change', path)
     },
     doBeforeUpload(file) {
-      if (this.allowType){
+      if (this.allowType) {
         // 获取文件后缀
         const fileExtension = file.name.split('.').pop().toLowerCase()
         console.log('允许的文件后缀', fileExtension)
@@ -339,7 +345,7 @@ export default {
             },
             onCancel: () => {
               console.log('Cancel')
-            }
+            },
           })
           this.uploadGoOn = false
           return false
@@ -365,7 +371,7 @@ export default {
             },
             onCancel: () => {
               console.log('Cancel')
-            }
+            },
           })
           this.uploadGoOn = false
           return false
@@ -378,14 +384,13 @@ export default {
       return true
     },
     handleChange(info) {
-
       console.log('--文件列表改变--')
       if (!info.file.status && this.uploadGoOn === false) {
         info.fileList.pop()
       }
 
       let fileList = info.fileList
-      console.log('fileList274', fileList.name)
+      console.log('fileList274', info)
       console.log('deorper', this.deorper, 'logal', this.logal)
 
       if (this.deorper == 'de') {
@@ -393,62 +398,62 @@ export default {
 
         // if (this.logal == fileList[0].name.split('.').shift()) {
 
-
-          if (info.file.status === 'done') {
-            if (this.number > 0) {
-              fileList = fileList.slice(-this.number)
-            }
-            if (info.file.response.success) {
-              fileList = fileList.map((file) => {
-                if (file.response) {
-                  let reUrl = file.response.message
-                  file.url = getFileAccessHttpUrl(reUrl)
-                }
-                return file
-              })
-            }
-            //this.$message.success(`${info.file.name} 上传成功!`);
-          } else if (info.file.status === 'error') {
-            // this.$message.error(`${info.file.name} 上传失败.`);
-            this.$error({
-              title: `${info.file.name} 上传失败.`,
-              // content: h => <div style='color:red;'>{res.message}</div>,
-              onOk: () => {
-                console.log('OK')
-              },
-              onCancel: () => {
-                console.log('Cancel')
+        if (info.file.status === 'done') {
+          if (this.number > 0) {
+            fileList = fileList.slice(-this.number)
+          }
+          if (info.file.response.success) {
+            let list = fileList.map((file) => {
+              if (file.response) {
+                let reUrl = file.response.message
+                file.name = this.extractLastPartFromPath(file.response.message)
+                file.url = getFileAccessHttpUrl(reUrl)
               }
+              return file
             })
-          } else if (info.file.status === 'removed') {
-            this.handleDelete(info.file)
+            fileList = list
           }
-          this.fileList = fileList
-          if (info.file.status === 'done' || info.file.status === 'removed') {
-            //returnUrl为true时仅返回文件路径
-            if (this.returnUrl) {
-              this.handlePathChange()
-            } else {
-              //returnUrl为false时返回文件名称、文件路径及文件大小
-              this.newFileList = []
-              for (var a = 0; a < fileList.length; a++) {
-                // update-begin-author:lvdandan date:20200603 for:【TESTA-514】【开源issue】多个文件同时上传时，控制台报错
-                if (fileList[a].status === 'done') {
-                  var fileJson = {
-                    fileName: fileList[a].name,
-                    filePath: fileList[a].response.message,
-                    fileSize: fileList[a].size
-                  }
-                  this.newFileList.push(fileJson)
-                } else {
-                  return
+          //this.$message.success(`${info.file.name} 上传成功!`);
+        } else if (info.file.status === 'error') {
+          // this.$message.error(`${info.file.name} 上传失败.`);
+          this.$error({
+            title: `${info.file.name} 上传失败.`,
+            // content: h => <div style='color:red;'>{res.message}</div>,
+            onOk: () => {
+              console.log('OK')
+            },
+            onCancel: () => {
+              console.log('Cancel')
+            },
+          })
+        } else if (info.file.status === 'removed') {
+          this.handleDelete(info.file)
+        }
+        this.fileList = fileList
+        if (info.file.status === 'done' || info.file.status === 'removed') {
+          //returnUrl为true时仅返回文件路径
+          if (this.returnUrl) {
+            this.handlePathChange()
+          } else {
+            //returnUrl为false时返回文件名称、文件路径及文件大小
+            this.newFileList = []
+            for (var a = 0; a < fileList.length; a++) {
+              // update-begin-author:lvdandan date:20200603 for:【TESTA-514】【开源issue】多个文件同时上传时，控制台报错
+              if (fileList[a].status === 'done') {
+                var fileJson = {
+                  fileName: fileList[a].name,
+                  filePath: fileList[a].response.message,
+                  fileSize: fileList[a].size,
                 }
-                // update-end-author:lvdandan date:20200603 for:【TESTA-514】【开源issue】多个文件同时上传时，控制台报错
+                this.newFileList.push(fileJson)
+              } else {
+                return
               }
-              this.$emit('change', this.newFileList)
+              // update-end-author:lvdandan date:20200603 for:【TESTA-514】【开源issue】多个文件同时上传时，控制台报错
             }
+            this.$emit('change', this.newFileList)
           }
-
+        }
 
         // } else {
         //   // this.$message.error('请上传文件名为'+this.logal+'的文件')
@@ -464,69 +469,66 @@ export default {
         //     }
         //   })
         // }
-
-
       } else if (this.deorper == 'per') {
         // 上传个人的
 
-
         // if (this.logal == fileList[0].name.split('.').shift()) {
 
-          if (info.file.status === 'done') {
-            if (this.number > 0) {
-              fileList = fileList.slice(-this.number)
-            }
-            if (info.file.response.success) {
-              fileList = fileList.map((file) => {
-                if (file.response) {
-                  let reUrl = file.response.message
-                  file.url = getFileAccessHttpUrl(reUrl)
-                }
-                return file
-              })
-            }
-            //this.$message.success(`${info.file.name} 上传成功!`);
-          } else if (info.file.status === 'error') {
-            // this.$message.error(`${info.file.name} 上传失败.`);
-            this.$error({
-              title: `${info.file.name} 上传失败.`,
-              // content: h => <div style='color:red;'>{res.message}</div>,
-              onOk: () => {
-                console.log('OK')
-              },
-              onCancel: () => {
-                console.log('Cancel')
+        if (info.file.status === 'done') {
+          if (this.number > 0) {
+            fileList = fileList.slice(-this.number)
+          }
+          if (info.file.response.success) {
+            fileList = fileList.map((file) => {
+              if (file.response) {
+                let reUrl = file.response.message
+                file.url = getFileAccessHttpUrl(reUrl)
+                file.name = this.extractLastPartFromPath(file.response.message)
               }
+              return file
             })
-          } else if (info.file.status === 'removed') {
-            this.handleDelete(info.file)
           }
-          this.fileList = fileList
-          if (info.file.status === 'done' || info.file.status === 'removed') {
-            //returnUrl为true时仅返回文件路径
-            if (this.returnUrl) {
-              this.handlePathChange()
-            } else {
-              //returnUrl为false时返回文件名称、文件路径及文件大小
-              this.newFileList = []
-              for (var a = 0; a < fileList.length; a++) {
-                // update-begin-author:lvdandan date:20200603 for:【TESTA-514】【开源issue】多个文件同时上传时，控制台报错
-                if (fileList[a].status === 'done') {
-                  var fileJson = {
-                    fileName: fileList[a].name,
-                    filePath: fileList[a].response.message,
-                    fileSize: fileList[a].size
-                  }
-                  this.newFileList.push(fileJson)
-                } else {
-                  return
+          //this.$message.success(`${info.file.name} 上传成功!`);
+        } else if (info.file.status === 'error') {
+          // this.$message.error(`${info.file.name} 上传失败.`);
+          this.$error({
+            title: `${info.file.name} 上传失败.`,
+            // content: h => <div style='color:red;'>{res.message}</div>,
+            onOk: () => {
+              console.log('OK')
+            },
+            onCancel: () => {
+              console.log('Cancel')
+            },
+          })
+        } else if (info.file.status === 'removed') {
+          this.handleDelete(info.file)
+        }
+        this.fileList = fileList
+        if (info.file.status === 'done' || info.file.status === 'removed') {
+          //returnUrl为true时仅返回文件路径
+          if (this.returnUrl) {
+            this.handlePathChange()
+          } else {
+            //returnUrl为false时返回文件名称、文件路径及文件大小
+            this.newFileList = []
+            for (var a = 0; a < fileList.length; a++) {
+              // update-begin-author:lvdandan date:20200603 for:【TESTA-514】【开源issue】多个文件同时上传时，控制台报错
+              if (fileList[a].status === 'done') {
+                var fileJson = {
+                  fileName: fileList[a].name,
+                  filePath: fileList[a].response.message,
+                  fileSize: fileList[a].size,
                 }
-                // update-end-author:lvdandan date:20200603 for:【TESTA-514】【开源issue】多个文件同时上传时，控制台报错
+                this.newFileList.push(fileJson)
+              } else {
+                return
               }
-              this.$emit('change', this.newFileList)
+              // update-end-author:lvdandan date:20200603 for:【TESTA-514】【开源issue】多个文件同时上传时，控制台报错
             }
+            this.$emit('change', this.newFileList)
           }
-
+        }
 
         // } else {
         //   this.$confirm({
@@ -545,8 +547,20 @@ export default {
         // }
       }
       // 上传个人的
+    },
+    extractLastPartFromPath(pathStr) {
+      if (!pathStr) return ''
 
+      // 使用 lastIndexOf 找到最后一个 "//" 的位置
+      const lastIndex = pathStr.lastIndexOf('//')
 
+      if (lastIndex === -1) {
+        // 如果没有找到 "//"，返回整个字符串
+        return pathStr
+      }
+
+      // 返回最后一个 "//" 后的内容
+      return pathStr.substring(lastIndex + 2) // +2 是因为要跳过 "//" 两个字符
     },
     handleDelete(file) {
       //如有需要新增 删除逻辑
@@ -579,7 +593,7 @@ export default {
           },
           onCancel: () => {
             console.log('Cancel')
-          }
+          },
         })
       } else {
         let curr = this.fileList[index].url
@@ -610,7 +624,7 @@ export default {
           },
           onCancel: () => {
             console.log('Cancel')
-          }
+          },
         })
       } else {
         let curr = this.fileList[index].url
@@ -636,7 +650,7 @@ export default {
         }
       }
       return -1
-    }
+    },
   },
   mounted() {
     const moverObj = document.getElementById(this.containerId + '-mover')
@@ -651,7 +665,9 @@ export default {
       })
     }
 
-    let picList = document.getElementById(this.containerId) ? document.getElementById(this.containerId).getElementsByClassName('ant-upload-list-picture-card') : []
+    let picList = document.getElementById(this.containerId)
+      ? document.getElementById(this.containerId).getElementsByClassName('ant-upload-list-picture-card')
+      : []
     if (picList && picList.length > 0) {
       picList[0].addEventListener('mouseover', (ev) => {
         ev = ev || window.event
@@ -664,7 +680,6 @@ export default {
           this.moveDisplay = 'block'
           this.currentImg = target.getElementsByTagName('img')[0].src
         }
-
       })
 
       picList[0].addEventListener('mouseout', (ev) => {
@@ -674,11 +689,13 @@ export default {
         if ('ant-upload-list-item-info' == target.className) {
           this.showMoverTask = true
           setTimeout(() => {
-            if (this.moverHold === false)
-              this.moveDisplay = 'none'
+            if (this.moverHold === false) this.moveDisplay = 'none'
           }, 100)
         }
-        if ('ant-upload-list-item ant-upload-list-item-done' == target.className || 'ant-upload-list ant-upload-list-picture-card' == target.className) {
+        if (
+          'ant-upload-list-item ant-upload-list-item-done' == target.className ||
+          'ant-upload-list ant-upload-list-picture-card' == target.className
+        ) {
           this.moveDisplay = 'none'
         }
       })
@@ -687,12 +704,12 @@ export default {
   },
   model: {
     prop: 'value',
-    event: 'change'
-  }
+    event: 'change',
+  },
 }
 </script>
 
-<style lang='less'>
+<style lang="less">
 .uploadty-disabled {
   .ant-upload-list-item {
     .anticon-close {
@@ -706,7 +723,8 @@ export default {
 
   /*update-begin-author:taoyan date:2022-12-5 for: issues/4250 建议JUpload组件，disabled为true的时候上传button能够变灰或者其他样式图案，便于知晓无法再点击上传*/
 
-  .ant-btn, .ant-upload-disabled {
+  .ant-btn,
+  .ant-upload-disabled {
     cursor: not-allowed;
     color: rgba(0, 0, 0, 0.25);
     background-color: #f5f5f5;
@@ -714,13 +732,12 @@ export default {
   }
 
   /*update-end-author:taoyan date:2022-12-5 for: issues/4250 建议JUpload组件，disabled为true的时候上传button能够变灰或者其他样式图案，便于知晓无法再点击上传*/
-
 }
 
 //---------------------------- begin 图片左右换位置 -------------------------------------
 .uploadty-mover-mask {
   background-color: rgba(0, 0, 0, 0.5);
-  opacity: .8;
+  opacity: 0.8;
   color: #fff;
   height: 28px;
   line-height: 28px;

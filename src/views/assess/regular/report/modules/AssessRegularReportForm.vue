@@ -24,22 +24,20 @@
           </tr>
         </table>
         <div class="tag">
-          <img src="@/assets/cadre/status/待提交.png" v-show="model.status === '1'">
-          <img src="@/assets/cadre/status/审核中.png" v-show="model.status === '2'">
-          <img src="@/assets/cadre/status/已完成.png" v-show="model.status === '3'">
-          <img src="@/assets/cadre/status/已退回.png" v-show="model.status === '4'">
+          <img src="@/assets/cadre/status/待提交.png" v-show="model.status === '1'" />
+          <img src="@/assets/cadre/status/审核中.png" v-show="model.status === '2'" />
+          <img src="@/assets/cadre/status/已完成.png" v-show="model.status === '3'" />
+          <img src="@/assets/cadre/status/已退回.png" v-show="model.status === '4'" />
         </div>
 
         <!-- 印章效果 -->
-<!--        <div class="seal">-->
-<!--          <div>审核人</div>-->
-<!--          <div class="seal-status">{{ model.auditBy }}</div>-->
-<!--          <div>{{model.updateTime}}</div>-->
-<!--        </div>-->
+        <!--        <div class="seal">-->
+        <!--          <div>审核人</div>-->
+        <!--          <div class="seal-status">{{ model.auditBy }}</div>-->
+        <!--          <div>{{model.updateTime}}</div>-->
+        <!--        </div>-->
 
-<!--        <seal :show-time='false' v-if="model.status === '3'" style="position: absolute; top: -10px; right: 0" :show-title="true" :title="'审核人'" :content="model.auditBy" />-->
-
-
+        <!--        <seal :show-time='false' v-if="model.status === '3'" style="position: absolute; top: -10px; right: 0" :show-title="true" :title="'审核人'" :content="model.auditBy" />-->
       </a-form-model>
     </j-form-container>
     <!-- 子表单区域 -->
@@ -56,7 +54,7 @@
           "
         >
           当前季度共可评“好”等次 <span style="color: red"> {{ totalQuota }}</span
-        >人，剩余可评 <span style="color: red">{{ remainingQuota }}</span> 人
+          >人，剩余可评 <span style="color: red">{{ remainingQuota }}</span> 人
         </div>
         <t-editable-table-reg
           :ref="refKeys[0]"
@@ -92,11 +90,11 @@ export default {
     return {
       labelCol: {
         xs: { span: 24 },
-        sm: { span: 5 }
+        sm: { span: 5 },
       },
       wrapperCol: {
         xs: { span: 24 },
-        sm: { span: 16 }
+        sm: { span: 16 },
       },
       model: {},
       currentUserInfo: {},
@@ -106,7 +104,7 @@ export default {
         assessName: [{ required: true, message: '请输入考核名称!' }],
         currentYear: [{ required: true, message: '请输入年度!' }],
         departmentCode: [{ required: true, message: '请输入处室!' }],
-        deadline: [{ required: true, message: '请输入截止日期!' }]
+        deadline: [{ required: true, message: '请输入截止日期!' }],
       },
       refKeys: ['assessRegularReportItem'],
       tableKeys: ['assessRegularReportItem'],
@@ -124,7 +122,7 @@ export default {
             width: '150px',
             placeholder: '请输入${title}',
             defaultValue: '',
-            validateRules: [{ required: true, message: '${title}不能为空' }]
+            validateRules: [{ required: true, message: '${title}不能为空' }],
           },
           {
             title: '第一季度',
@@ -133,7 +131,7 @@ export default {
             dictCode: 'regular_assess_level',
             disabled: false,
             placeholder: '请输入${title}',
-            defaultValue: ''
+            defaultValue: '',
           },
           {
             title: '第二季度',
@@ -142,7 +140,7 @@ export default {
             dictCode: 'regular_assess_level',
             disabled: false,
             placeholder: '请输入${title}',
-            defaultValue: ''
+            defaultValue: '',
           },
           {
             title: '第三季度',
@@ -151,7 +149,7 @@ export default {
             dictCode: 'regular_assess_level',
             disabled: false,
             placeholder: '请输入${title}',
-            defaultValue: ''
+            defaultValue: '',
           },
           {
             title: '第四季度',
@@ -160,9 +158,9 @@ export default {
             dictCode: 'regular_assess_level',
             disabled: false,
             placeholder: '请输入${title}',
-            defaultValue: ''
-          }
-        ]
+            defaultValue: '',
+          },
+        ],
       },
       url: {
         add: '/regular/report/add',
@@ -170,11 +168,11 @@ export default {
         queryById: '/regular/report/queryById',
         assessRegularReportItem: {
           list: '/regular/report/queryByMainId',
-          sublistRemainingSeats: '/regular/report/sublistRemainingSeats'
-        }
+          sublistRemainingSeats: '/regular/report/sublistRemainingSeats',
+        },
       },
       totalQuota: 0,
-      remainingQuota: 0
+      remainingQuota: 0,
     }
   },
   props: {
@@ -182,13 +180,13 @@ export default {
     disabled: {
       type: Boolean,
       default: false,
-      required: false
-    }
+      required: false,
+    },
   },
   computed: {
     formDisabled() {
       return this.disabled
-    }
+    },
   },
   created() {
     // debugger
@@ -214,8 +212,7 @@ export default {
     },
     /** 调用完edit()方法之后会自动调用此方法 */
     editAfter() {
-      this.$nextTick(() => {
-      })
+      this.$nextTick(() => {})
       // 加载子表数据
       if (this.model.id) {
         let params = { id: this.model.id }
@@ -246,7 +243,7 @@ export default {
       let main = Object.assign(this.model, allValues.formValue)
       return {
         ...main, // 展开
-        assessRegularReportItemList: allValues.tablesValue[0].values
+        assessRegularReportItemList: allValues.tablesValue[0].values,
       }
     },
     validateError(msg) {
@@ -261,14 +258,14 @@ export default {
       // })
       this.$error({
         title: '错误',
-        content: msg
+        content: msg,
       })
     },
     checkReportPerson() {
-      getCurrentUserRoles().then(res => {
+      getCurrentUserRoles().then((res) => {
         if (res.success) {
           // 判断数组中是否包含"department_cadre_admin"
-          if (!res.result.includes("department_cadre_admin")){
+          if (!res.result.includes('department_cadre_admin')) {
             if (!this.model.reportBy) {
               // this.model.reportBy = this.currentUserInfo.id
               this.model.reportBy = this.currentUserInfo.realname
@@ -294,7 +291,7 @@ export default {
       if (!isAllFilled) {
         this.$warning({
           title: '提示',
-          content: '当前季度的内容尚未全部填写，请检查！'
+          content: '当前季度的内容尚未全部填写，请检查！',
         })
         return // 阻止提交
       }
@@ -316,8 +313,7 @@ export default {
       // 获取所有单元格的值
       this.$refs.assessRegularReportItem.getValuesPromise().then((res) => {
         // 更新 dataSource 为最新的值
-        this.assessRegularReportItemTable.dataSource = res
-
+        // this.assessRegularReportItemTable.dataSource = [...res]
         // 计算当前 A 的总数
         const countA = res.filter((item) => item[column.key] === 'A').length
 
@@ -326,23 +322,23 @@ export default {
           // 提示用户
           this.$warning({
             title: '提示',
-            content: '超过所给名额，无法设置为 “好”'
+            content: '超过所给名额，无法设置为 “好”',
           })
 
           // 将当前单元格的值设置为 null
           this.$refs.assessRegularReportItem.setValues([
             {
               rowKey: row.id, // 使用当前行的 key
-              values: { [column.key]: null } // 设置为 null
-            }
+              values: { [column.key]: null }, // 设置为 null
+            },
           ])
         } else {
           // 更新 remainingQuota
           this.remainingQuota = this.totalQuota - countA
         }
       })
-    }
-  }
+    },
+  },
 }
 </script>
 
@@ -358,7 +354,7 @@ table {
   tr {
     td {
       padding-left: 30px;
-      border: 1px solid #CCD4D7;
+      border: 1px solid #ccd4d7;
       border-collapse: collapse; /* 移除单元格之间的间隔 */
 
       /deep/ i {
@@ -376,9 +372,10 @@ table {
       }
     }
 
-    td:nth-child(1), td:nth-child(3) {
-      background-color: #F4F8FA;
-      color: #25477C;
+    td:nth-child(1),
+    td:nth-child(3) {
+      background-color: #f4f8fa;
+      color: #25477c;
     }
   }
 }
@@ -388,5 +385,4 @@ table {
   top: -10px;
   right: 0;
 }
-
 </style>

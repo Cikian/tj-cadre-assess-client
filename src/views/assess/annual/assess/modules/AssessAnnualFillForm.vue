@@ -1,9 +1,9 @@
 <template>
-  <a-spin :spinning='confirmLoading' style='padding: 0 80px'>
-    <j-form-container :disabled='formDisabled'>
+  <a-spin :spinning="confirmLoading" style="padding: 0 80px">
+    <j-form-container :disabled="formDisabled">
       <!-- 主表单区域 -->
-      <a-form-model ref='form' :model='model' :rules='validatorRules' slot='detail'>
-        <table class='msgtable'>
+      <a-form-model ref="form" :model="model" :rules="validatorRules" slot="detail">
+        <table class="msgtable">
           <tr>
             <td>年度</td>
             <td>{{ model.currentYear }}</td>
@@ -19,18 +19,18 @@
           <tr>
             <td>被考核对象</td>
             <td>{{ leaderNames }}</td>
-<!--            <td v-if='model.auditBy'>审核人</td>-->
-<!--            <td v-if='model.auditBy'>{{ model.auditBy }}</td>-->
-            <td v-if='model.remark' style="color: #ff3838">退回原因</td>
-            <td v-if='model.remark' style="color: #ff3838">{{ model.remark }}</td>
+            <!--            <td v-if='model.auditBy'>审核人</td>-->
+            <!--            <td v-if='model.auditBy'>{{ model.auditBy }}</td>-->
+            <td v-if="model.remark" style="color: #ff3838">退回原因</td>
+            <td v-if="model.remark" style="color: #ff3838">{{ model.remark }}</td>
           </tr>
         </table>
 
-        <div class='tag'>
-          <img src='@/assets/cadre/status/待提交.png' v-show='model.status == 1'>
-          <img src='@/assets/cadre/status/审核中.png' v-show='model.status == 2'>
-          <img src='@/assets/cadre/status/已完成.png' v-show='model.status == 3'>
-          <img src='@/assets/cadre/status/已退回.png' v-show='model.status == 4'>
+        <div class="tag">
+          <img src="@/assets/cadre/status/待提交.png" v-show="model.status == 1" />
+          <img src="@/assets/cadre/status/审核中.png" v-show="model.status == 2" />
+          <img src="@/assets/cadre/status/已完成.png" v-show="model.status == 3" />
+          <img src="@/assets/cadre/status/已退回.png" v-show="model.status == 4" />
         </div>
 
         <!--        <seal :show-time='false' v-if="model.status == 3" style="position: absolute; top: -10px; right: 0" :show-title="true" :title="'审核人'" :content="model.auditBy" />-->
@@ -50,33 +50,33 @@
       </a-form-model>
     </j-form-container>
 
-    <div ref='container' style='overflow-y: scroll; width: 100%'>
-      <div style='margin-top: 20px'>
-        <a-affix ref='fix' :target='() => this.$refs.container'>
-          <div style='background-color: #fff; padding: 10px 20px' ref='div1'>
-            <tj-title value='本处室(单位)年度考核工作安排'></tj-title>
+    <div ref="container" style="overflow-y: scroll; width: 100%">
+      <div style="margin-top: 20px">
+        <a-affix ref="fix" :target="() => this.$refs.container">
+          <div style="background-color: #fff; padding: 10px 20px" ref="div1">
+            <tj-title value="本处室(单位)年度考核工作安排"></tj-title>
           </div>
         </a-affix>
         <assess-annual-arrange-form
-          ref='assessAnnualArrangeForm'
-          @validateError='validateError'
-          :disabled='formDisabled'
-          :leaders='model.leader'
-          :depart-name='model.depart_dictText'
-          @saveRow='addLeader'
-          :depart-type='model.departType'
+          ref="assessAnnualArrangeForm"
+          @validateError="validateError"
+          :disabled="formDisabled"
+          :leaders="model.leader"
+          :depart-name="model.depart_dictText"
+          @saveRow="addLeader"
+          :depart-type="model.departType"
         ></assess-annual-arrange-form>
       </div>
 
       <!--      <div v-if="model.departType !== 'bureau'" style="padding-top: 20px; background-color: white; margin: 10px 0px">-->
-      <div style='background-color: white; margin: 20px 0px'>
-        <a-affix ref='fix' :target='() => this.$refs.container'>
+      <div style="background-color: white; margin: 20px 0px">
+        <a-affix ref="fix" :target="() => this.$refs.container">
           <div
-            style='background-color: #fff; padding: 10px 20px; display: flex; align-items: center; position: relative'
-            ref='div22'
+            style="background-color: #fff; padding: 10px 20px; display: flex; align-items: center; position: relative"
+            ref="div22"
           >
             <t-title></t-title>
-            <tj-title value='上传年度工作总结'></tj-title>
+            <tj-title value="上传年度工作总结"></tj-title>
           </div>
         </a-affix>
 
@@ -84,49 +84,58 @@
         <!--                  text="点击上传述职报告" style="padding: 0px 0px 30px 0px; width: 95%; margin: 0 auto"-->
         <!--                  v-model="model.reportFile" />-->
         <jeupload
-          :type='"annual"'
-          :allow-type='["doc","wps","docx"]'
-          :disabled='formDisabled'
-          :multiple='false'
-          :dragger='true'
-          :deorper='de'
-          :logal='model.depart_dictText'
-          v-model='model.duty'
+          :type="'annual'"
+          :allow-type="['doc', 'wps', 'docx']"
+          :disabled="formDisabled"
+          :multiple="false"
+          :dragger="true"
+          :deorper="de"
+          :logal="model.depart_dictText"
+          v-model="model.duty"
         ></jeupload>
       </div>
 
-      <div style='margin-top: 20px'>
-        <a-affix ref='fix' :target='() => this.$refs.container'>
+      <div style="margin-top: 20px">
+        <a-affix ref="fix" :target="() => this.$refs.container">
           <div
-            style='background-color: #fff; padding: 10px 20px; display: flex; align-items: center; position: relative'
-            ref='div2'
+            style="background-color: #fff; padding: 10px 20px; display: flex; align-items: center; position: relative"
+            ref="div2"
           >
-            <tj-title value='上传述职报告（含党组织关系在本处室（单位）的局管总师和二巡）'></tj-title>
+            <tj-title value="上传述职报告（含党组织关系在本处室（单位）的局管总师和二巡）"></tj-title>
             <!--            <span style="font-size: 16px; font-weight: 600; margin-left: 20px">{{ model.currentYear }}年度</span>-->
-            <tj-title v-if='model.departType !== "bureau"' :bold='false' :size=18
-                      :value='"本单位共可推荐"+model.excellentDeputyNum+"名优秀副职，剩余可推荐" + (model.excellentDeputyNum - this.excellentDeputyNum) + "名"'></tj-title>
+            <tj-title
+              v-if="model.departType !== 'bureau'"
+              :bold="false"
+              :size="18"
+              :value="
+                '本单位共可推荐' +
+                model.excellentDeputyNum +
+                '名优秀副职，剩余可推荐' +
+                (model.excellentDeputyNum - this.excellentDeputyNum) +
+                '名'
+              "
+            ></tj-title>
           </div>
-
         </a-affix>
 
-        <a-spin tip='数据加载中...' :spinning='regularGradeLoading'>
-          <a-empty v-if='regularGrade.length === 0' :imageStyle="{ height: '70px' }" style='height: 100px'>
-            <span slot='description'> 当前无被测评对象 </span>
+        <a-spin tip="数据加载中..." :spinning="regularGradeLoading">
+          <a-empty v-if="regularGrade.length === 0" :imageStyle="{ height: '70px' }" style="height: 100px">
+            <span slot="description"> 当前无被测评对象 </span>
           </a-empty>
 
-          <a-table v-else :columns='regularGradeColumns' :data-source='regularGrade' :pagination='false'>
+          <a-table v-else :columns="regularGradeColumns" :data-source="regularGrade" :pagination="false">
             <!--            <template slot="quarter1" slot-scope="text, record, index">-->
             <!--              {{text === "A" ? "好" : text === "B" ? "较好"}}-->
             <!--            </template>-->
 
-            <template slot='quarter1' slot-scope='text, record, index'>
-              <div key='quarter1'>
+            <template slot="quarter1" slot-scope="text, record, index">
+              <div key="quarter1">
                 <j-dict-select-tag
-                  v-if='record.editable'
-                  type='list'
-                  :value='text'
-                  dictCode='regular_assess_level'
-                  style='width: 100px'
+                  v-if="record.editable"
+                  type="list"
+                  :value="text"
+                  dictCode="regular_assess_level"
+                  style="width: 100px"
                   @change="(e) => handleChange(e, record.hashId, 'quarter1')"
                 />
                 <template v-else>
@@ -135,14 +144,14 @@
               </div>
             </template>
 
-            <template slot='quarter2' slot-scope='text, record, index'>
-              <div key='quarter2'>
+            <template slot="quarter2" slot-scope="text, record, index">
+              <div key="quarter2">
                 <j-dict-select-tag
-                  v-if='record.editable'
-                  type='list'
-                  :value='text'
-                  dictCode='regular_assess_level'
-                  style='width: 100px'
+                  v-if="record.editable"
+                  type="list"
+                  :value="text"
+                  dictCode="regular_assess_level"
+                  style="width: 100px"
                   @change="(e) => handleChange(e, record.hashId, 'quarter2')"
                 />
                 <template v-else>
@@ -151,14 +160,14 @@
               </div>
             </template>
 
-            <template slot='quarter3' slot-scope='text, record, index'>
-              <div key='quarter3'>
+            <template slot="quarter3" slot-scope="text, record, index">
+              <div key="quarter3">
                 <j-dict-select-tag
-                  v-if='record.editable'
-                  type='list'
-                  :value='text'
-                  dictCode='regular_assess_level'
-                  style='width: 100px'
+                  v-if="record.editable"
+                  type="list"
+                  :value="text"
+                  dictCode="regular_assess_level"
+                  style="width: 100px"
                   @change="(e) => handleChange(e, record.hashId, 'quarter3')"
                 />
                 <template v-else>
@@ -167,14 +176,14 @@
               </div>
             </template>
 
-            <template slot='quarter4' slot-scope='text, record, index'>
-              <div key='quarter4'>
+            <template slot="quarter4" slot-scope="text, record, index">
+              <div key="quarter4">
                 <j-dict-select-tag
-                  v-if='record.editable'
-                  type='list'
-                  :value='text'
-                  dictCode='regular_assess_level'
-                  style='width: 100px'
+                  v-if="record.editable"
+                  type="list"
+                  :value="text"
+                  dictCode="regular_assess_level"
+                  style="width: 100px"
                   @change="(e) => handleChange(e, record.hashId, 'quarter4')"
                 />
                 <template v-else>
@@ -183,38 +192,45 @@
               </div>
             </template>
 
-            <template slot='excellentDeputy' slot-scope='text, record, index'>
+            <template slot="excellentDeputy" slot-scope="text, record, index">
               <j-switch
-                v-model='regularGrade[index].excellentDeputy'
-                @change='switchChange'
-                :disabled="record.type !== 'deputy' || formDisabled || (excellentDeputyNum >= model.excellentDeputyNum && regularGrade[index].excellentDeputy!=='Y')"
+                v-model="regularGrade[index].excellentDeputy"
+                @change="switchChange"
+                :disabled="
+                  record.type !== 'deputy' ||
+                  formDisabled ||
+                  (excellentDeputyNum >= model.excellentDeputyNum && regularGrade[index].excellentDeputy !== 'Y')
+                "
               ></j-switch>
             </template>
 
-            <template slot='operation' slot-scope='text, record, index'>
-              <div class='editable-row-operations'>
-                <span v-if='record.editable'>
-                  <a @click='() => save(record.hashId)'>保存</a>
-                  <a-divider type='vertical' />
-                  <a-popconfirm title='确定关闭?' @confirm='() => cancel(record.hashId)'>
+            <template slot="operation" slot-scope="text, record, index">
+              <div class="editable-row-operations">
+                <span v-if="record.editable">
+                  <a @click="() => save(record.hashId)">保存</a>
+                  <a-divider type="vertical" />
+                  <a-popconfirm title="确定关闭?" @confirm="() => cancel(record.hashId)">
                     <a>关闭</a>
                   </a-popconfirm>
                 </span>
                 <span v-else>
-                  <a :disabled="editingKey !== '' || !record.hasRegular || formDisabled"
-                     @click='() => editRow(record.hashId)'>填写</a>
+                  <a
+                    :disabled="editingKey !== '' || !record.hasRegular || formDisabled"
+                    @click="() => editRow(record.hashId)"
+                    >填写</a
+                  >
                 </span>
               </div>
             </template>
 
-            <template slot='fileSlot' slot-scope='text, record, index'>
+            <template slot="fileSlot" slot-scope="text, record, index">
               <jeupload
-                :disabled='formDisabled'
-                :allow-type='["doc","wps","docx"]'
-                :type='"annual"'
-                :deorper='per'
-                :logal='record.realname'
-                v-model='regularGrade[index].dutyReport'
+                :disabled="formDisabled"
+                :allow-type="['doc', 'wps', 'docx']"
+                :type="'annual'"
+                :deorper="per"
+                :logal="record.realname"
+                v-model="regularGrade[index].dutyReport"
                 :text="'上传'"
               ></jeupload>
 
@@ -224,88 +240,111 @@
         </a-spin>
       </div>
 
-      <div style='margin-top: 20px'>
-        <a-affix ref='fix' :target='() => this.$refs.container'>
+      <div style="margin-top: 20px">
+        <a-affix ref="fix" :target="() => this.$refs.container">
           <div
-            style='background-color: #fff; padding: 10px 100px 10px 20px; display: flex; align-items: center; justify-content: space-between'
-            ref='div2'>
-            <tj-title value='领导干部受问责情况'></tj-title>
+            style="
+              background-color: #fff;
+              padding: 10px 100px 10px 20px;
+              display: flex;
+              align-items: center;
+              justify-content: space-between;
+            "
+            ref="div2"
+          >
+            <tj-title value="领导干部受问责情况"></tj-title>
             <div>
-              <a-checkbox v-model='model.nonAccountability' :disabled='accountabilityData.length > 0 || formDisabled'
-                          @change='checkBoxChangeA'>
+              <a-checkbox
+                v-model="model.nonAccountability"
+                :disabled="accountabilityData.length > 0 || formDisabled"
+                @change="checkBoxChangeA"
+              >
                 无问责
               </a-checkbox>
-              <a-button :disabled='model.nonAccountability || formDisabled' @click='handleAddA' type='primary'
-                        icon='plus'>
+              <a-button
+                :disabled="model.nonAccountability || formDisabled"
+                @click="handleAddA"
+                type="primary"
+                icon="plus"
+              >
                 新增问责
               </a-button>
             </div>
           </div>
-
         </a-affix>
 
-        <a-spin tip='数据加载中...' :spinning='accountabilityLoading'>
+        <a-spin tip="数据加载中..." :spinning="accountabilityLoading">
           <a-table
-            size='middle'
+            size="middle"
             bordered
-            rowKey='id'
-            :columns='accountabilityColumns'
-            :dataSource='accountabilityData'
-            :pagination='false'
+            rowKey="id"
+            :columns="accountabilityColumns"
+            :dataSource="accountabilityData"
+            :pagination="false"
           >
-            <template slot='fileSlot' slot-scope='text'>
-              <span v-if='!text' style='font-size: 16px; font-style: italic'>无文件</span>
-              <a-button v-else type='primary' icon='download' @click='downloadFile(text)'> 下载</a-button>
+            <template slot="fileSlot" slot-scope="text">
+              <span v-if="!text" style="font-size: 16px; font-style: italic">无文件</span>
+              <a-button v-else type="primary" icon="download" @click="downloadFile(text)"> 下载</a-button>
             </template>
 
-            <span slot='action' slot-scope='text, record'>
-              <a :disabled='formDisabled' @click='handleEditA(record)'>编辑</a>
-              <a-divider type='vertical' />
-              <a :disabled='formDisabled' @click='handleDeleteA(record.id)'>删除</a>
+            <span slot="action" slot-scope="text, record">
+              <a :disabled="formDisabled" @click="handleEditA(record)">编辑</a>
+              <a-divider type="vertical" />
+              <a :disabled="formDisabled" @click="handleDeleteA(record.id)">删除</a>
             </span>
           </a-table>
         </a-spin>
       </div>
 
-      <div style='margin-top: 20px'>
-        <a-affix ref='fix' :target='() => this.$refs.container'>
+      <div style="margin-top: 20px">
+        <a-affix ref="fix" :target="() => this.$refs.container">
           <div
-            style='background-color: #fff; padding: 10px 100px 10px 20px; display: flex; align-items: center; justify-content: space-between'
-            ref='div2'>
-            <tj-title value='领导干部半年以上休假情况'></tj-title>
+            style="
+              background-color: #fff;
+              padding: 10px 100px 10px 20px;
+              display: flex;
+              align-items: center;
+              justify-content: space-between;
+            "
+            ref="div2"
+          >
+            <tj-title value="领导干部半年以上休假情况"></tj-title>
             <div>
-              <a-checkbox v-model='model.nonVacation' :disabled='vacationData.length > 0 || formDisabled'
-                          @change='checkBoxChangeV'>
+              <a-checkbox
+                v-model="model.nonVacation"
+                :disabled="vacationData.length > 0 || formDisabled"
+                @change="checkBoxChangeV"
+              >
                 无休假
               </a-checkbox>
-              <a-button :disabled='model.nonVacation || formDisabled' @click='handleAddV' type='primary' icon='plus'>
+              <a-button :disabled="model.nonVacation || formDisabled" @click="handleAddV" type="primary" icon="plus">
                 新增休假
               </a-button>
             </div>
           </div>
         </a-affix>
 
-        <a-spin tip='数据加载中...' :spinning='vacationLoading'>
+        <a-spin tip="数据加载中..." :spinning="vacationLoading">
           <a-table
-            size='middle'
+            size="middle"
             bordered
-            rowKey='id'
-            :columns='vacationColumns'
-            :dataSource='vacationData'
-            :pagination='false'
+            rowKey="id"
+            :columns="vacationColumns"
+            :dataSource="vacationData"
+            :pagination="false"
           >
-            <template slot='date' slot-scope='text, record'>
+            <template slot="date" slot-scope="text, record">
               <span>{{ record.startDate }} — {{ record.endDate }}</span>
             </template>
 
-            <template slot='fileSlot' slot-scope='text'>
-              <span v-if='!text' style='font-size: 16px; font-style: italic'>无文件</span>
-              <a-button v-else type='primary' icon='download' @click='downloadFile(text)'> 下载</a-button>
+            <template slot="fileSlot" slot-scope="text">
+              <span v-if="!text" style="font-size: 16px; font-style: italic">无文件</span>
+              <a-button v-else type="primary" icon="download" @click="downloadFile(text)"> 下载</a-button>
             </template>
-            <span slot='action' slot-scope='text, record'>
-              <a :disabled='formDisabled' @click='handleEditV(record)'>编辑</a>
-              <a-divider type='vertical' />
-              <a :disabled='formDisabled' @click='handleDeleteV(record.id)'>删除</a>
+            <span slot="action" slot-scope="text, record">
+              <a :disabled="formDisabled" @click="handleEditV(record)">编辑</a>
+              <a-divider type="vertical" />
+              <a :disabled="formDisabled" @click="handleDeleteV(record.id)">删除</a>
             </span>
           </a-table>
         </a-spin>
@@ -335,10 +374,9 @@
     <!--      </a-descriptions>-->
     <!--    </div>-->
     <!-- 子表单区域 -->
-    <assess-annual-accountability-modal ref='aForm' @ok='aModalFormOk'></assess-annual-accountability-modal>
-    <assess-annual-vacation-modal ref='vForm' @ok='vModalFormOk'></assess-annual-vacation-modal>
+    <assess-annual-accountability-modal ref="aForm" @ok="aModalFormOk"></assess-annual-accountability-modal>
+    <assess-annual-vacation-modal ref="vForm" @ok="vModalFormOk"></assess-annual-vacation-modal>
   </a-spin>
-
 </template>
 
 <script>
@@ -359,14 +397,13 @@ import {
   getGroupSummaryByFillId,
   getLeadersRegularGrade,
   getVacationByLeaderIds,
-  saveAnnualFill
+  saveAnnualFill,
 } from '@/api/assessApis'
 import store from '@/store'
 import TjSubtitle from '@/component/TjSubtitle.vue'
 import { isEmpty } from 'xe-utils/methods'
 import TUpload from '@/component/TUplod.vue'
-import AssessAnnualAccountabilityModal
-  from '@/views/assess/annual/accountability/modules/AssessAnnualAccountabilityModal.vue'
+import AssessAnnualAccountabilityModal from '@/views/assess/annual/accountability/modules/AssessAnnualAccountabilityModal.vue'
 import AssessAnnualVacationModal from '@/views/assess/annual/vacation/modules/AssessAnnualVacationModal.vue'
 import seal from '@/component/Seal.vue'
 
@@ -382,7 +419,7 @@ export default {
     TjTitle,
     TEditableTable,
     AssessAnnualArrangeForm,
-    jeupload
+    jeupload,
   },
   data() {
     return {
@@ -392,11 +429,11 @@ export default {
       per: 'per',
       labelCol: {
         xs: { span: 24 },
-        sm: { span: 5 }
+        sm: { span: 5 },
       },
       wrapperCol: {
         xs: { span: 24 },
-        sm: { span: 16 }
+        sm: { span: 16 },
       },
       model: {},
       // 新增时子表默认添加几行空数据
@@ -408,7 +445,7 @@ export default {
       // 述职报告
       assessAnnualDutyReportTable: {
         loading: false,
-        dataSource: []
+        dataSource: [],
         // columns: [
         //   {
         //     title: '考核填报id',
@@ -444,11 +481,11 @@ export default {
         edit: '/modules/annual/assessAnnualFill/edit',
         queryById: '/modules/annual/assessAnnualFill/queryById',
         assessAnnualDutyReport: {
-          list: '/modules/annual/assessAnnualFill/queryAssessAnnualDutyReportByMainId'
+          list: '/modules/annual/assessAnnualFill/queryAssessAnnualDutyReportByMainId',
         },
         assessAnnualArrange: {
-          list: '/modules/annual/assessAnnualFill/queryAssessAnnualArrangeByMainId'
-        }
+          list: '/modules/annual/assessAnnualFill/queryAssessAnnualArrangeByMainId',
+        },
       },
       leaderList: [],
       leaderNameList: [],
@@ -460,70 +497,70 @@ export default {
           key: 'rowIndex',
           width: 60,
           align: 'center',
-          customRender: function(t, r, index) {
+          customRender: function (t, r, index) {
             return parseInt(index) + 1
-          }
+          },
         },
         {
           title: '姓名',
           dataIndex: 'realname',
           key: 'realname',
-          align: 'center'
+          align: 'center',
         },
         {
           title: '类别',
           dataIndex: 'roleName',
           key: 'roleName',
-          align: 'center'
+          align: 'center',
         },
         {
           title: '第一季度',
           dataIndex: 'quarter1_dictText',
           key: 'quarter1',
           align: 'center',
-          scopedSlots: { customRender: 'quarter1' }
+          scopedSlots: { customRender: 'quarter1' },
         },
         {
           title: '第二季度',
           dataIndex: 'quarter2_dictText',
           key: 'quarter2',
           align: 'center',
-          scopedSlots: { customRender: 'quarter2' }
+          scopedSlots: { customRender: 'quarter2' },
         },
         {
           title: '第三季度',
           key: 'quarter3',
           dataIndex: 'quarter3_dictText',
           align: 'center',
-          scopedSlots: { customRender: 'quarter3' }
+          scopedSlots: { customRender: 'quarter3' },
         },
         {
           title: '第四季度',
           key: 'quarter4',
           dataIndex: 'quarter4_dictText',
           align: 'center',
-          scopedSlots: { customRender: 'quarter4' }
+          scopedSlots: { customRender: 'quarter4' },
         },
         {
           title: `推荐优秀副职`,
           key: 'excellentDeputy',
           dataIndex: 'excellentDeputy',
           align: 'center',
-          scopedSlots: { customRender: 'excellentDeputy' }
+          scopedSlots: { customRender: 'excellentDeputy' },
         },
         {
           title: '编辑平时成绩',
           key: 'operation',
           align: 'center',
-          scopedSlots: { customRender: 'operation' }
+          scopedSlots: { customRender: 'operation' },
         },
         {
           title: '述职报告',
           key: 'dutyReport',
           dataIndex: 'dutyReport',
           align: 'center',
-          scopedSlots: { customRender: 'fileSlot' }
-        }
+          scopedSlots: { customRender: 'fileSlot' },
+        },
       ],
       accountabilityColumns: [
         {
@@ -532,38 +569,38 @@ export default {
           key: 'rowIndex',
           width: 60,
           align: 'center',
-          customRender: function(t, r, index) {
+          customRender: function (t, r, index) {
             return parseInt(index) + 1
-          }
+          },
         },
         {
           title: '姓名',
           align: 'center',
-          dataIndex: 'personnel'
+          dataIndex: 'personnel',
         },
         {
           title: '问责类型',
           align: 'center',
-          dataIndex: 'typeText'
+          dataIndex: 'typeText',
         },
         {
           title: '事由',
           align: 'center',
           dataIndex: 'reason',
-          width: 200
+          width: 200,
         },
         {
           title: '给予处理部门',
           align: 'center',
-          dataIndex: 'processingDepart'
+          dataIndex: 'processingDepart',
         },
         {
           title: '生效日期',
           align: 'center',
           dataIndex: 'effectiveDate',
-          customRender: function(text) {
+          customRender: function (text) {
             return !text ? '' : text.length > 10 ? text.substr(0, 10) : text
-          }
+          },
         },
         // {
         //   title: '影响期至',
@@ -575,15 +612,15 @@ export default {
           title: '证明材料',
           align: 'center',
           dataIndex: 'proof',
-          scopedSlots: { customRender: 'fileSlot' }
+          scopedSlots: { customRender: 'fileSlot' },
         },
         {
           title: '操作',
           dataIndex: 'action',
           align: 'center',
           width: 150,
-          scopedSlots: { customRender: 'action' }
-        }
+          scopedSlots: { customRender: 'action' },
+        },
       ],
       vacationColumns: [
         {
@@ -592,43 +629,43 @@ export default {
           key: 'rowIndex',
           width: 60,
           align: 'center',
-          customRender: function(t, r, index) {
+          customRender: function (t, r, index) {
             return parseInt(index) + 1
-          }
+          },
         },
         {
           title: '年度',
           align: 'center',
-          dataIndex: 'currentYear_dictText'
+          dataIndex: 'currentYear_dictText',
         },
         {
           title: '姓名',
           align: 'center',
-          dataIndex: 'name'
+          dataIndex: 'name',
         },
         {
           title: '休假类型',
           align: 'center',
-          dataIndex: 'type_dictText'
+          dataIndex: 'type_dictText',
         },
         {
           title: '起止时间',
           align: 'center',
           dataIndex: 'startDate',
-          scopedSlots: { customRender: 'date' }
+          scopedSlots: { customRender: 'date' },
         },
         {
           title: '备注',
           align: 'center',
-          dataIndex: 'remark'
+          dataIndex: 'remark',
         },
         {
           title: '操作',
           dataIndex: 'action',
           align: 'center',
           width: 150,
-          scopedSlots: { customRender: 'action' }
-        }
+          scopedSlots: { customRender: 'action' },
+        },
       ],
 
       regularGrade: [],
@@ -646,7 +683,7 @@ export default {
       summaryList: [],
       groupSummary: {},
       currentDepart: {},
-      excellentDeputyNum: 0
+      excellentDeputyNum: 0,
     }
   },
   props: {
@@ -654,63 +691,61 @@ export default {
     disabled: {
       type: Boolean,
       default: false,
-      required: false
-    }
+      required: false,
+    },
   },
   computed: {
     formDisabled() {
       return this.disabled
-    }
+    },
   },
-  mounted() {
-  },
-  created() {
-  },
+  mounted() {},
+  created() {},
   methods: {
-    handleEditA: function(record) {
+    handleEditA: function (record) {
       this.$refs.aForm.edit(record)
       this.$refs.aForm.title = '编辑'
       this.$refs.aForm.disableSubmit = false
     },
-    handleDeleteA: function(id) {
+    handleDeleteA: function (id) {
       var that = this
       deleteAction('/modules/annual/assessAnnualAccountability/delete', { id: id }).then((res) => {
         if (res.success) {
           // that.$message.success(res.message)
           this.$success({
             title: '提示',
-            content: res.message
+            content: res.message,
           })
           this.getAccountability()
         } else {
           // that.$message.warning(res.message)
           this.$warning({
             title: '提示',
-            content: res.message
+            content: res.message,
           })
         }
       })
     },
-    handleEditV: function(record) {
+    handleEditV: function (record) {
       this.$refs.vForm.edit(record)
       this.$refs.vForm.title = '编辑'
       this.$refs.vForm.disableSubmit = false
     },
-    handleDeleteV: function(id) {
+    handleDeleteV: function (id) {
       var that = this
       deleteAction('/modules/assessAnnualVacation/delete', { id: id }).then((res) => {
         if (res.success) {
           // that.$message.success(res.message)
           this.$success({
             title: '提示',
-            content: res.message
+            content: res.message,
           })
           this.getVacation()
         } else {
           // that.$message.warning(res.message)
           this.$warning({
             title: '提示',
-            content: res.message
+            content: res.message,
           })
         }
       })
@@ -721,12 +756,12 @@ export default {
     checkBoxChangeV(e) {
       this.model.nonVacation = e.target.checked
     },
-    handleAddA: function() {
+    handleAddA: function () {
       this.$refs.aForm.add()
       this.$refs.aForm.title = '新增问责情况'
       this.$refs.aForm.disableSubmit = false
     },
-    handleAddV: function() {
+    handleAddV: function () {
       this.$refs.vForm.add()
       this.$refs.vForm.title = '新增休假情况'
       this.$refs.vForm.disableSubmit = false
@@ -860,7 +895,7 @@ export default {
                     }
                   }
 
-                  if (this.summaryList.length !== this.regularGrade.length){
+                  if (this.summaryList.length !== this.regularGrade.length) {
                     for (let i = 0; i < this.summaryList.length; i++) {
                       // 在regularGrade中找不到summaryList中的数据，则新增数据
                       if (!this.regularGrade.find((item) => item.hashId === this.summaryList[i].hashId)) {
@@ -877,7 +912,7 @@ export default {
                           dutyReport: this.summaryList[i].dutyReport,
                           type: this.summaryList[i].type,
                           hasRegular: this.summaryList[i].hasRegular,
-                          personOrder: this.summaryList[i].personOrder
+                          personOrder: this.summaryList[i].personOrder,
                         }
                         if (obj.excellentDeputy === 'Y') {
                           this.excellentDeputyNum++
@@ -933,57 +968,57 @@ export default {
                             target.quarter1 === 'A'
                               ? '好'
                               : target.quarter1 === 'B'
-                                ? '较好'
-                                : target.quarter1 === 'C'
-                                  ? '一般'
-                                  : target.quarter1 === 'D'
-                                    ? '较差'
-                                    : target.quarter1 === 'E'
-                                      ? '不确定'
-                                      : '',
+                              ? '较好'
+                              : target.quarter1 === 'C'
+                              ? '一般'
+                              : target.quarter1 === 'D'
+                              ? '较差'
+                              : target.quarter1 === 'E'
+                              ? '不确定'
+                              : '',
                           quarter2: target.quarter2,
                           quarter2_dictText:
                             target.quarter2 === 'A'
                               ? '好'
                               : target.quarter2 === 'B'
-                                ? '较好'
-                                : target.quarter2 === 'C'
-                                  ? '一般'
-                                  : target.quarter2 === 'D'
-                                    ? '较差'
-                                    : target.quarter2 === 'E'
-                                      ? '不确定'
-                                      : '',
+                              ? '较好'
+                              : target.quarter2 === 'C'
+                              ? '一般'
+                              : target.quarter2 === 'D'
+                              ? '较差'
+                              : target.quarter2 === 'E'
+                              ? '不确定'
+                              : '',
                           quarter3: target.quarter3,
                           quarter3_dictText:
                             target.quarter3 === 'A'
                               ? '好'
                               : target.quarter3 === 'B'
-                                ? '较好'
-                                : target.quarter3 === 'C'
-                                  ? '一般'
-                                  : target.quarter3 === 'D'
-                                    ? '较差'
-                                    : target.quarter3 === 'E'
-                                      ? '不确定'
-                                      : '',
+                              ? '较好'
+                              : target.quarter3 === 'C'
+                              ? '一般'
+                              : target.quarter3 === 'D'
+                              ? '较差'
+                              : target.quarter3 === 'E'
+                              ? '不确定'
+                              : '',
                           quarter4: target.quarter4,
                           quarter4_dictText:
                             target.quarter4 === 'A'
                               ? '好'
                               : target.quarter4 === 'B'
-                                ? '较好'
-                                : target.quarter4 === 'C'
-                                  ? '一般'
-                                  : target.quarter4 === 'D'
-                                    ? '较差'
-                                    : target.quarter4 === 'E'
-                                      ? '不确定'
-                                      : '',
+                              ? '较好'
+                              : target.quarter4 === 'C'
+                              ? '一般'
+                              : target.quarter4 === 'D'
+                              ? '较差'
+                              : target.quarter4 === 'E'
+                              ? '不确定'
+                              : '',
                           excellentDeputy: this.summaryList[i].excellentDeputy,
                           dutyReport: this.summaryList[i].dutyReport,
                           type: this.summaryList[i].type,
-                          hasRegular: this.summaryList[i].hasRegular
+                          hasRegular: this.summaryList[i].hasRegular,
                         }
                         if (obj.excellentDeputy === 'Y') {
                           this.excellentDeputyNum++
@@ -1003,7 +1038,7 @@ export default {
                           dutyReport: this.summaryList[i].dutyReport,
                           type: this.summaryList[i].type,
                           hasRegular: this.summaryList[i].hasRegular,
-                          personOrder: this.summaryList[i].personOrder
+                          personOrder: this.summaryList[i].personOrder,
                         }
                         if (obj.excellentDeputy === 'Y') {
                           this.excellentDeputyNum++
@@ -1042,7 +1077,7 @@ export default {
                         dutyReport: this.summaryList[i].dutyReport,
                         type: this.summaryList[i].type,
                         hasRegular: this.summaryList[i].hasRegular,
-                        personOrder: this.summaryList[i].personOrder
+                        personOrder: this.summaryList[i].personOrder,
                       }
                       if (obj.excellentDeputy === 'Y') {
                         this.excellentDeputyNum++
@@ -1062,10 +1097,9 @@ export default {
                 // 获取休假
                 this.getVacation()
                 // 获取单位信息
-                getCurrentUserDepart().then(res => {
+                getCurrentUserDepart().then((res) => {
                   if (res.success) {
                     this.currentDepart = res.result
-
                   }
                 })
               })
@@ -1096,7 +1130,6 @@ export default {
     //     // scrollView.addEventListener('scroll', this.affixChange, true)
     //   })
     // },
-
 
     getArrangeData() {
       // 获取工作安排
@@ -1154,7 +1187,7 @@ export default {
       return {
         ...main, // 展开
         assessAnnualDutyReportList: allValues.tablesValue[0].values,
-        assessAnnualArrangeList: this.$refs.assessAnnualArrangeForm.getFormData()
+        assessAnnualArrangeList: this.$refs.assessAnnualArrangeForm.getFormData(),
       }
     },
     validateError(msg) {
@@ -1172,7 +1205,7 @@ export default {
       // })
       this.$warning({
         title: '消息提示',
-        content: msg
+        content: msg,
       })
     },
 
@@ -1219,7 +1252,7 @@ export default {
           // })
           this.$success({
             title: '消息提示',
-            content: res.message
+            content: res.message,
           })
           this.$emit('ok')
           this.close()
@@ -1238,7 +1271,7 @@ export default {
           // })
           this.$warning({
             title: '消息提示',
-            content: res.message
+            content: res.message,
           })
         }
         this.$emit('changeLoading')
@@ -1257,7 +1290,7 @@ export default {
       if (this.accountabilityData.length <= 0 && !this.model.nonAccountability) {
         this.$warning({
           title: '未填写受问责情况',
-          content: '请填写本单位受问责情况，如无问责，请勾选新增问责按钮左侧的“无问责”'
+          content: '请填写本单位受问责情况，如无问责，请勾选新增问责按钮左侧的“无问责”',
         })
         this.$emit('changeLoading')
         return
@@ -1265,7 +1298,7 @@ export default {
       if (this.vacationData.length <= 0 && !this.model.nonVacation) {
         this.$warning({
           title: '未填写休假情况',
-          content: '请填写本单位休假情况，如无休假，请勾选新增休假按钮左侧的“无休假”'
+          content: '请填写本单位休假情况，如无休假，请勾选新增休假按钮左侧的“无休假”',
         })
         this.$emit('changeLoading')
         return
@@ -1275,7 +1308,7 @@ export default {
       if (this.model.duty === null || this.model.duty === '') {
         this.$warning({
           title: '未上传年度工作总结',
-          content: '请上传年度工作总结'
+          content: '请上传年度工作总结',
         })
         this.$emit('changeLoading')
         return
@@ -1289,14 +1322,17 @@ export default {
 
       // 处理述职报告
       for (let i = 0; i < this.regularGrade.length; i++) {
-        if (this.model.departType !== 'bureau' && this.regularGrade[i].hasRegular
-          && (this.regularGrade[i].quarter1 === '' || this.regularGrade[i].quarter1 === null)
-          && (this.regularGrade[i].quarter2 === '' || this.regularGrade[i].quarter2 === null)
-          && (this.regularGrade[i].quarter3 === '' || this.regularGrade[i].quarter3 === null)
-          && (this.regularGrade[i].quarter4 === '' || this.regularGrade[i].quarter4 === null)) {
+        if (
+          this.model.departType !== 'bureau' &&
+          this.regularGrade[i].hasRegular &&
+          (this.regularGrade[i].quarter1 === '' || this.regularGrade[i].quarter1 === null) &&
+          (this.regularGrade[i].quarter2 === '' || this.regularGrade[i].quarter2 === null) &&
+          (this.regularGrade[i].quarter3 === '' || this.regularGrade[i].quarter3 === null) &&
+          (this.regularGrade[i].quarter4 === '' || this.regularGrade[i].quarter4 === null)
+        ) {
           this.$warning({
             title: '未填写 ' + this.regularGrade[i].realname + ' 的平时成绩',
-            content: '单位中存在参与平时考核的人员，请至少填写其第四季度的平时成绩'
+            content: '单位中存在参与平时考核的人员，请至少填写其第四季度的平时成绩',
           })
           this.$emit('changeLoading')
           return
@@ -1304,7 +1340,7 @@ export default {
         if (this.regularGrade[i].dutyReport === null || this.regularGrade[i].dutyReport === '') {
           this.$warning({
             title: '未上传 ' + this.regularGrade[i].realname + ' 的述职报告',
-            content: '请上传 ' + this.regularGrade[i].realname + ' 的述职报告'
+            content: '请上传 ' + this.regularGrade[i].realname + ' 的述职报告',
           })
           this.$emit('changeLoading')
           return
@@ -1347,7 +1383,7 @@ export default {
                 // })
                 that.$success({
                   title: '消息提示',
-                  content: res.message
+                  content: res.message,
                 })
                 that.$emit('ok')
                 that.close()
@@ -1364,7 +1400,7 @@ export default {
                 // })
                 that.$warning({
                   title: '消息提示',
-                  content: res.message
+                  content: res.message,
                 })
               }
               that.$emit('changeLoading')
@@ -1372,7 +1408,7 @@ export default {
           },
           onCancel: () => {
             that.$emit('changeLoading')
-          }
+          },
         })
       } else {
         submitForm.summaryList = this.summaryList
@@ -1390,7 +1426,7 @@ export default {
             // })
             this.$success({
               title: '消息提示',
-              content: res.message
+              content: res.message,
             })
             this.$emit('ok')
             this.close()
@@ -1407,13 +1443,12 @@ export default {
             // })
             this.$warning({
               title: '消息提示',
-              content: res.message
+              content: res.message,
             })
           }
           this.$emit('changeLoading')
         })
       }
-
     },
     downloadFile(text) {
       if (!text) {
@@ -1431,7 +1466,7 @@ export default {
         // })
         this.$warning({
           title: '消息提示',
-          content: '未知的文件'
+          content: '未知的文件',
         })
         return
       }
@@ -1452,12 +1487,12 @@ export default {
     addLeader(hashId) {
       // this.getGradeByLeader(hashId)
       // this.getGradeByLeader('张三男自然资源调查监测处一级巡视员')
-    }
-  }
+    },
+  },
 }
 </script>
 
-<style scoped lang='less'>
+<style scoped lang="less">
 /deep/ .ant-form {
   background-color: #ffffff;
   padding: 20px;
@@ -1510,5 +1545,4 @@ export default {
   top: -10px;
   right: 0;
 }
-
 </style>
